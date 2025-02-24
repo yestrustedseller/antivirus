@@ -14,6 +14,11 @@
             padding: 20px;
             color: #fff;
             overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f1c3a, #1a2e5c);
+            color: #ddd;
         }
         /* Splash Screen */
         #splash {
@@ -28,7 +33,7 @@
             align-items: center;
             flex-direction: column;
             z-index: 1000;
-            animation: fadeOut 3s forwards;
+            animation: fadeOut 5s forwards;
         }
         @keyframes fadeOut {
             0% { opacity: 1; }
@@ -37,29 +42,48 @@
         }
         #splash h1 {
             color: #4CAF50;
-            font-size: 48px;
-            animation: bounce 1s infinite;
+            font-size: clamp(32px, 5vw, 48px);
+            animation: bounce 1.5s infinite;
         }
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
+            40% { transform: translateY(-25px); }
+            60% { transform: translateY(-15px); }
         }
         #splash p {
-            font-size: 18px;
+            font-size: clamp(16px, 3vw, 20px);
             color: #ddd;
+        }
+        #splash .progress-bar {
+            width: 50%;
+            height: 20px;
+            background: #444;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        #splash .progress {
+            height: 100%;
+            background: #4CAF50;
+            width: 0;
+            transition: width 4s ease;
         }
         .container {
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
             width: 90%;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             color: #333;
             animation: slideIn 0.5s ease;
             display: none;
+            transition: background 0.5s, color 0.5s;
+        }
+        .container.dark-mode {
+            background: rgba(30, 30, 30, 0.95);
+            color: #ddd;
         }
         .container.active {
             display: block;
@@ -72,7 +96,11 @@
             text-align: center;
             color: #2e7d32;
             margin-bottom: 20px;
+            font-size: clamp(24px, 4vw, 36px);
             animation: pulse 2s infinite;
+        }
+        .dark-mode h1 {
+            color: #66bb6a;
         }
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -80,25 +108,32 @@
             100% { transform: scale(1); }
         }
         .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
             margin-bottom: 20px;
+            padding: 0 10px;
         }
         .tab-btn {
-            padding: 12px 20px;
+            padding: 12px;
             border: none;
             background: #e0e0e0;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            flex: 1;
-            max-width: 150px;
+            font-size: clamp(12px, 2vw, 16px);
+            text-align: center;
+        }
+        .dark-mode .tab-btn {
+            background: #444;
+            color: #ddd;
         }
         .tab-btn:hover {
             background: #d0d0d0;
             transform: translateY(-2px);
+        }
+        .dark-mode .tab-btn:hover {
+            background: #555;
         }
         .tab-btn.active {
             background: #4CAF50;
@@ -108,6 +143,7 @@
         .tab-content {
             display: none;
             animation: fadeInContent 0.5s ease;
+            padding: 0 10px;
         }
         @keyframes fadeInContent {
             from { opacity: 0; }
@@ -127,6 +163,12 @@
             border-radius: 10px;
             outline: none;
             transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        .dark-mode input[type="text"], .dark-mode input[type="file"], .dark-mode textarea, .dark-mode input[type="datetime-local"] {
+            border-color: #555;
+            background: #333;
+            color: #ddd;
         }
         input[type="text"]:focus, input[type="file"]:focus, textarea:focus, input[type="datetime-local"]:focus {
             border-color: #4CAF50;
@@ -140,7 +182,7 @@
             background: linear-gradient(90deg, #4CAF50, #66bb6a);
             color: white;
             cursor: pointer;
-            font-size: 16px;
+            font-size: clamp(14px, 2vw, 16px);
             transition: all 0.3s ease;
             margin: 10px 0;
         }
@@ -156,6 +198,7 @@
             font-weight: bold;
             display: none;
             animation: bounceIn 0.5s ease;
+            font-size: clamp(14px, 2vw, 16px);
         }
         @keyframes bounceIn {
             0% { transform: scale(0.8); opacity: 0; }
@@ -165,11 +208,17 @@
         .safe { background: #e6ffe6; color: #2e7d32; }
         .threat { background: #ffe6e6; color: #d32f2f; }
         .warning { background: #fff3e0; color: #ef6c00; }
+        .dark-mode .safe { background: #1a3c34; }
+        .dark-mode .threat { background: #3c1a1a; }
+        .dark-mode .warning { background: #3c2f1a; }
         #details {
             margin-top: 15px;
-            font-size: 14px;
+            font-size: clamp(12px, 1.5vw, 14px);
             color: #555;
             display: none;
+        }
+        .dark-mode #details {
+            color: #aaa;
         }
         .progress-bar {
             width: 100%;
@@ -180,6 +229,9 @@
             margin: 15px 0;
             display: none;
             position: relative;
+        }
+        .dark-mode .progress-bar {
+            background: #444;
         }
         .progress {
             height: 100%;
@@ -199,6 +251,7 @@
             transform: translate(-50%, -50%);
             color: white;
             font-weight: bold;
+            font-size: clamp(12px, 1.5vw, 14px);
         }
         .log, .quarantine, .settings, .report, .threat-feed {
             margin-top: 20px;
@@ -207,6 +260,9 @@
             border-radius: 10px;
             max-height: 250px;
             overflow-y: auto;
+        }
+        .dark-mode .log, .dark-mode .quarantine, .dark-mode .settings, .dark-mode .report, .dark-mode .threat-feed {
+            background: #2a2a2a;
         }
         .log ul, .quarantine ul, .report ul, .threat-feed ul {
             list-style: none;
@@ -218,6 +274,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: clamp(12px, 1.5vw, 14px);
+        }
+        .dark-mode .log li, .dark-mode .quarantine li, .dark-mode .report li, .dark-mode .threat-feed li {
+            border-bottom: 1px solid #444;
         }
         .remove-btn, .export-btn {
             background: #e57373;
@@ -227,6 +287,7 @@
             color: white;
             cursor: pointer;
             transition: background 0.3s;
+            font-size: clamp(10px, 1.5vw, 12px);
         }
         .remove-btn:hover, .export-btn:hover {
             background: #d32f2f;
@@ -236,23 +297,32 @@
             padding: 15px;
             background: #f1f8e9;
             border-radius: 10px;
+            font-size: clamp(12px, 1.5vw, 14px);
+        }
+        .dark-mode .tips {
+            background: #1a3c34;
         }
         .settings-grid {
             display: grid;
             gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
         .real-time-status {
-            font-size: 14px;
+            font-size: clamp(12px, 1.5vw, 14px);
             margin-top: 10px;
         }
-        @media (max-width: 1100px) {
-            .container { width: 95%; }
-            .tab-btn { max-width: 120px; font-size: 14px; }
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .tabs { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+            #splash h1 { font-size: 32px; }
+            #splash p { font-size: 16px; }
+            #splash .progress-bar { width: 70%; }
         }
-        @media (max-width: 600px) {
-            .tabs { flex-direction: column; gap: 5px; }
-            .tab-btn { max-width: none; }
-            h1 { font-size: 24px; }
+        @media (max-width: 480px) {
+            .container { padding: 10px; width: 95%; }
+            .tabs { grid-template-columns: 1fr; }
+            .tab-btn { padding: 10px; }
+            .scan-btn, .action-btn { padding: 10px; }
         }
     </style>
 </head>
@@ -260,7 +330,10 @@
     <!-- Splash Screen -->
     <div id="splash">
         <h1><i class="fa-solid fa-shield-virus"></i> Guardian Antivirus Pro</h1>
-        <p>Loading your ultimate security solution...</p>
+        <p id="splash-text">Initializing your advanced security suite...</p>
+        <div class="progress-bar">
+            <div class="progress" id="splash-progress"></div>
+        </div>
     </div>
 
     <div class="container">
@@ -277,6 +350,12 @@
             <button class="tab-btn" onclick="openTab('extension-scan')">Extension Scan</button>
             <button class="tab-btn" onclick="openTab('firewall-monitor')">Firewall</button>
             <button class="tab-btn" onclick="openTab('privacy-check')">Privacy Check</button>
+            <button class="tab-btn" onclick="openTab('usb-scanner')">USB Scanner</button>
+            <button class="tab-btn" onclick="openTab('password-checker')">Password Checker</button>
+            <button class="tab-btn" onclick="openTab('performance-monitor')">Performance</button>
+            <button class="tab-btn" onclick="openTab('vpn-status')">VPN Status</button>
+            <button class="tab-btn" onclick="openTab('history-analyzer')">History Analyzer</button>
+            <button class="tab-btn" onclick="openTab('startup-manager')">Startup Manager</button>
             <button class="tab-btn" onclick="openTab('threat-feed')">Threat Feed</button>
             <button class="tab-btn" onclick="openTab('update-checker')">Updates</button>
             <button class="tab-btn" onclick="openTab('settings')">Settings</button>
@@ -383,6 +462,53 @@
             <ul id="privacy-issues"></ul>
         </div>
 
+        <!-- USB Scanner Tab -->
+        <div id="usb-scanner" class="tab-content">
+            <button class="scan-btn" onclick="scanUSB()">Scan USB Devices</button>
+            <div class="progress-bar" id="usb-progress">
+                <div class="progress" id="usb-progress-fill"></div>
+                <span class="progress-text" id="usb-progress-text">0%</span>
+            </div>
+            <div id="usb-result" class="result"></div>
+        </div>
+
+        <!-- Password Checker Tab -->
+        <div id="password-checker" class="tab-content">
+            <div class="input-wrapper">
+                <input type="text" id="passwordInput" placeholder="Enter password to check">
+                <i class="fa-solid fa-lock" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+            </div>
+            <button class="scan-btn" onclick="checkPassword()">Check Password Strength</button>
+            <div id="password-result" class="result"></div>
+        </div>
+
+        <!-- Performance Monitor Tab -->
+        <div id="performance-monitor" class="tab-content">
+            <button class="action-btn" onclick="monitorPerformance()">Start Performance Monitor</button>
+            <div id="performance-result" class="result"></div>
+            <ul id="performance-stats"></ul>
+        </div>
+
+        <!-- VPN Status Tab -->
+        <div id="vpn-status" class="tab-content">
+            <button class="action-btn" onclick="checkVPNStatus()">Check VPN Status</button>
+            <div id="vpn-result" class="result"></div>
+        </div>
+
+        <!-- Browser History Analyzer Tab -->
+        <div id="history-analyzer" class="tab-content">
+            <button class="scan-btn" onclick="analyzeHistory()">Analyze Browser History</button>
+            <div id="history-result" class="result"></div>
+            <ul id="history-issues"></ul>
+        </div>
+
+        <!-- Startup Manager Tab -->
+        <div id="startup-manager" class="tab-content">
+            <button class="action-btn" onclick="manageStartup()">Manage Startup Items</button>
+            <div id="startup-result" class="result"></div>
+            <ul id="startup-items"></ul>
+        </div>
+
         <!-- Threat Feed Tab -->
         <div id="threat-feed" class="tab-content">
             <h4><i class="fa-solid fa-globe"></i> Global Threat Intelligence</h4>
@@ -405,6 +531,7 @@
                 <label><input type="checkbox" id="autoQuarantine" onchange="saveSettings()"> Auto-Quarantine Threats</label>
                 <label><input type="checkbox" id="verboseLog" onchange="saveSettings()"> Verbose Logging</label>
                 <label><input type="checkbox" id="disableAnimations" onchange="toggleAnimations()"> Disable Animations</label>
+                <label><input type="checkbox" id="darkMode" onchange="toggleDarkMode()"> Dark Mode</label>
                 <label><input type="text" id="customTLDs" placeholder="Custom suspicious TLDs (e.g., .xyz, .tk)"><button class="action-btn" onclick="addCustomTLDs()">Add</button></label>
                 <div>
                     <label>Schedule Scan:</label>
@@ -433,7 +560,7 @@
     <script>
         let scanLog = JSON.parse(localStorage.getItem('scanLog')) || [];
         let quarantine = JSON.parse(localStorage.getItem('quarantine')) || [];
-        let settings = JSON.parse(localStorage.getItem('settings')) || { autoQuarantine: true, verboseLog: false, disableAnimations: false };
+        let settings = JSON.parse(localStorage.getItem('settings')) || { autoQuarantine: true, verboseLog: false, disableAnimations: false, darkMode: false };
         let realTimeActive = false;
         let reportData = [];
 
@@ -509,6 +636,7 @@
         function saveSettings() {
             settings.autoQuarantine = document.getElementById('autoQuarantine').checked;
             settings.verboseLog = document.getElementById('verboseLog').checked;
+            settings.darkMode = document.getElementById('darkMode').checked;
             localStorage.setItem('settings', JSON.stringify(settings));
         }
 
@@ -528,6 +656,15 @@
             settings.disableAnimations = disable;
             localStorage.setItem('settings', JSON.stringify(settings));
             updateLog(`Animations ${disable ? 'disabled' : 'enabled'}`, 'safe');
+        }
+
+        function toggleDarkMode() {
+            const enable = document.getElementById('darkMode').checked;
+            document.body.classList.toggle('dark-mode', enable);
+            document.querySelector('.container').classList.toggle('dark-mode', enable);
+            settings.darkMode = enable;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            updateLog(`Dark mode ${enable ? 'enabled' : 'disabled'}`, 'safe');
         }
 
         function scheduleScan() {
@@ -935,6 +1072,216 @@
             resultDiv.style.display = 'block';
         }
 
+        // USB Scanner with Connection Check
+        function scanUSB() {
+            const resultDiv = document.getElementById('usb-result');
+            resultDiv.style.display = 'none';
+
+            const usbConnected = Math.random() > 0.3; // Simulate USB detection
+            if (!usbConnected) {
+                resultDiv.textContent = '⚠️ No USB devices detected!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('USB scan failed: No devices connected', 'warning');
+                return;
+            }
+
+            animateProgress('usb-progress', () => {
+                const usbDevices = ['USB Drive 1', 'USB Drive 2'];
+                let threats = 0;
+
+                usbDevices.forEach(device => {
+                    const random = Math.random();
+                    if (random > 0.9) {
+                        threats++;
+                        addToQuarantine(`${device} - Malware`, 'threat');
+                        updateLog(`USB scan: ${device} - Threat detected`, 'threat');
+                    } else {
+                        updateLog(`USB scan: ${device} - Safe`, 'safe');
+                    }
+                });
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} on USB Detected!`
+                    : '✅ USB Devices Safe!';
+                resultDiv.className = threats > 0 ? 'threat' : 'safe';
+                resultDiv.style.display = 'block';
+                updateLog('USB scan completed', 'safe');
+            });
+        }
+
+        // Password Checker
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value.trim();
+            const resultDiv = document.getElementById('password-result');
+            resultDiv.style.display = 'none';
+
+            if (!password) {
+                resultDiv.textContent = '⚠️ Please enter a password!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('Password check failed: No input', 'warning');
+                return;
+            }
+
+            const lengthScore = password.length >= 12 ? 2 : password.length >= 8 ? 1 : 0;
+            const complexityScore = /[A-Z]/.test(password) + /[a-z]/.test(password) + /[0-9]/.test(password) + /[!@#$%^&*]/.test(password);
+            const totalScore = lengthScore + complexityScore;
+
+            let status, className;
+            if (totalScore >= 5) {
+                status = '✅ Strong Password!';
+                className = 'safe';
+            } else if (totalScore >= 3) {
+                status = '⚠️ Moderate Password';
+                className = 'warning';
+            } else {
+                status = '❌ Weak Password!';
+                className = 'threat';
+            }
+
+            resultDiv.textContent = status;
+            resultDiv.className = className;
+            resultDiv.style.display = 'block';
+            updateLog(`Password check: ${status}`, className);
+        }
+
+        // Performance Monitor
+        function monitorPerformance() {
+            const resultDiv = document.getElementById('performance-result');
+            const statsList = document.getElementById('performance-stats');
+            resultDiv.style.display = 'none';
+            statsList.innerHTML = '';
+
+            const metrics = [
+                { name: 'CPU Usage', max: 100 },
+                { name: 'Memory Usage', max: 100 },
+                { name: 'Disk Usage', max: 100 }
+            ];
+
+            setInterval(() => {
+                let issues = 0;
+                statsList.innerHTML = '';
+                metrics.forEach(metric => {
+                    const value = Math.floor(Math.random() * metric.max);
+                    const li = document.createElement('li');
+                    li.textContent = `${metric.name}: ${value}%`;
+                    if (value > 80) {
+                        issues++;
+                        li.style.color = '#ef6c00';
+                        updateLog(`Performance: ${metric.name} high (${value}%)`, 'warning');
+                    } else {
+                        li.style.color = '#2e7d32';
+                        if (settings.verboseLog) updateLog(`Performance: ${metric.name} normal (${value}%)`, 'safe');
+                    }
+                    statsList.appendChild(li);
+                });
+
+                resultDiv.textContent = issues > 0 
+                    ? `⚠️ ${issues} Performance Issue${issues > 1 ? 's' : ''} Detected!`
+                    : '✅ System Performance Optimal!';
+                resultDiv.className = issues > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+            }, 5000);
+            updateLog('Performance monitoring started', 'safe');
+        }
+
+        // VPN Status Checker
+        function checkVPNStatus() {
+            const resultDiv = document.getElementById('vpn-result');
+            resultDiv.style.display = 'none';
+
+            setTimeout(() => {
+                const vpnConnected = Math.random() > 0.5;
+                resultDiv.textContent = vpnConnected 
+                    ? '✅ VPN is Active!'
+                    : '⚠️ VPN is Not Connected!';
+                resultDiv.className = vpnConnected ? 'safe' : 'warning';
+                resultDiv.style.display = 'block';
+                updateLog(`VPN status: ${vpnConnected ? 'Active' : 'Not connected'}`, vpnConnected ? 'safe' : 'warning');
+            }, 1000);
+        }
+
+        // Browser History Analyzer
+        function analyzeHistory() {
+            const resultDiv = document.getElementById('history-result');
+            const historyIssues = document.getElementById('history-issues');
+            resultDiv.style.display = 'none';
+            historyIssues.innerHTML = '';
+
+            const fakeHistory = [
+                { url: 'https://safe-site.com', risk: Math.random() > 0.95 },
+                { url: 'http://phishy-site.tk', risk: Math.random() > 0.7 },
+                { url: 'https://example.com', risk: Math.random() > 0.9 }
+            ];
+
+            let issues = 0;
+            fakeHistory.forEach(entry => {
+                const li = document.createElement('li');
+                if (entry.risk) {
+                    issues++;
+                    li.textContent = `${entry.url} - Suspicious`;
+                    li.style.color = '#d32f2f';
+                    addToQuarantine(`History: ${entry.url}`, 'threat');
+                    updateLog(`History analysis: ${entry.url} - Suspicious`, 'threat');
+                } else {
+                    li.textContent = `${entry.url} - Safe`;
+                    li.style.color = '#2e7d32';
+                    updateLog(`History analysis: ${entry.url} - Safe`, 'safe');
+                }
+                historyIssues.appendChild(li);
+            });
+
+            resultDiv.textContent = issues > 0 
+                ? `❌ ${issues} Suspicious History Item${issues > 1 ? 's' : ''} Found!`
+                : '✅ Browser History Safe!';
+            resultDiv.className = issues > 0 ? 'threat' : 'safe';
+            resultDiv.style.display = 'block';
+            updateLog('Browser history analysis completed', 'safe');
+        }
+
+        // Startup Manager
+        function manageStartup() {
+            const resultDiv = document.getElementById('startup-result');
+            const startupItems = document.getElementById('startup-items');
+            resultDiv.style.display = 'none';
+            startupItems.innerHTML = '';
+
+            const fakeStartup = [
+                { name: 'App1', suspicious: Math.random() > 0.9 },
+                { name: 'App2', suspicious: Math.random() > 0.85 },
+                { name: 'App3', suspicious: Math.random() > 0.9 }
+            ];
+
+            let suspiciousCount = 0;
+            fakeStartup.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span style="color: ${item.suspicious ? '#d32f2f' : '#2e7d32'}">${item.name} - ${item.suspicious ? 'Suspicious' : 'Normal'}</span>
+                    ${item.suspicious ? `<button class="remove-btn" onclick="disableStartup(${index})">Disable</button>` : ''}
+                `;
+                startupItems.appendChild(li);
+                if (item.suspicious) {
+                    suspiciousCount++;
+                    updateLog(`Startup: ${item.name} - Suspicious`, 'threat');
+                } else {
+                    updateLog(`Startup: ${item.name} - Normal`, 'safe');
+                }
+            });
+
+            resultDiv.textContent = suspiciousCount > 0 
+                ? `⚠️ ${suspiciousCount} Suspicious Startup Item${suspiciousCount > 1 ? 's' : ''} Found!`
+                : '✅ Startup Items Safe!';
+            resultDiv.className = suspiciousCount > 0 ? 'warning' : 'safe';
+            resultDiv.style.display = 'block';
+            updateLog('Startup management completed', 'safe');
+        }
+
+        function disableStartup(index) {
+            updateLog(`Startup item ${index + 1} disabled`, 'safe');
+            manageStartup(); // Refresh the list
+        }
+
         // Threat Feed
         function updateThreatFeed() {
             const threatList = document.getElementById('threat-feed-list');
@@ -1034,10 +1381,20 @@
 
         // Load Initial State
         window.onload = () => {
+            const splashProgress = document.getElementById('splash-progress');
+            const splashText = document.getElementById('splash-text');
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                splashProgress.style.width = `${progress}%`;
+                if (progress >= 70) splashText.textContent = 'Finalizing security checks...';
+                if (progress >= 100) clearInterval(progressInterval);
+            }, 400);
+
             setTimeout(() => {
                 document.getElementById('splash').style.display = 'none';
                 document.querySelector('.container').classList.add('active');
-            }, 3000);
+            }, 5000);
 
             updateLog('Guardian Antivirus Pro started', 'safe');
             renderLog();
@@ -1046,11 +1403,1597 @@
             document.getElementById('urlInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') scanURL();
             });
+            document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkPassword();
+            });
             document.getElementById('autoQuarantine').checked = settings.autoQuarantine;
             document.getElementById('verboseLog').checked = settings.verboseLog;
             document.getElementById('disableAnimations').checked = settings.disableAnimations;
+            document.getElementById('darkMode').checked = settings.darkMode;
             if (settings.disableAnimations) toggleAnimations();
+            if (settings.darkMode) toggleDarkMode();
+        };
+    </script>
+</body><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardian Antivirus Pro</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFzONWFxTw==" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #66bb6a;
+            --danger: #d32f2f;
+            --warning: #ef6c00;
+            --safe: #2e7d32;
+            --bg-light: rgba(255, 255, 255, 0.95);
+            --bg-dark: rgba(30, 30, 30, 0.95);
+            --text-light: #333;
+            --text-dark: #ddd;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 0;
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f1c3a, #1a2e5c);
+            color: var(--text-dark);
+        }
+        /* Splash Screen */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            animation: fadeOut 5s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        #splash h1 {
+            color: var(--primary);
+            font-size: clamp(32px, 5vw, 48px);
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-25px); }
+            60% { transform: translateY(-15px); }
+        }
+        #splash p {
+            font-size: clamp(16px, 3vw, 20px);
+            color: #ddd;
+            margin: 10px 0;
+        }
+        #splash .progress-bar {
+            width: 50%;
+            height: 20px;
+            background: #444;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #splash .progress {
+            height: 100%;
+            background: var(--primary);
+            width: 0;
+            transition: width 4s ease;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+            width: 90%;
+            max-width: 1400px;
+            margin: 20px auto;
+            background: var(--bg-light);
+            border-radius: 20px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: background 0.5s, color 0.5s;
+            display: none;
+        }
+        .container.dark-mode {
+            background: var(--bg-dark);
+        }
+        .container.active {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background: #f5f5f5;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            transition: transform 0.3s ease;
+        }
+        .dark-mode .sidebar {
+            background: #222;
+            border-right: 1px solid #444;
+        }
+        .sidebar.hidden {
+            transform: translateX(-100%);
+            position: absolute;
+            z-index: 10;
+        }
+        .sidebar h1 {
+            color: var(--primary);
+            font-size: 24px;
+            margin: 0 0 20px;
+            animation: none;
+        }
+        .dark-mode .sidebar h1 {
+            color: var(--secondary);
+        }
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .tab-btn {
+            padding: 12px;
+            border: none;
+            background: #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            text-align: left;
+            color: var(--text-light);
+        }
+        .dark-mode .tab-btn {
+            background: #444;
+            color: var(--text-dark);
+        }
+        .tab-btn:hover {
+            background: #d0d0d0;
+            transform: translateX(5px);
+        }
+        .dark-mode .tab-btn:hover {
+            background: #555;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeInContent 0.5s ease;
+        }
+        @keyframes fadeInContent {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="file"], textarea, input[type="datetime-local"] {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 16px;
+            background: white;
+        }
+        .dark-mode input[type="text"], .dark-mode input[type="file"], .dark-mode textarea, .dark-mode input[type="datetime-local"] {
+            border-color: #555;
+            background: #333;
+            color: var(--text-dark);
+        }
+        input[type="text"]:focus, input[type="file"]:focus, textarea:focus, input[type="datetime-local"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        .scan-btn, .action-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+        .scan-btn:hover, .action-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .scan-btn:disabled, .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            animation: bounceIn 0.5s ease;
+            font-size: 16px;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        .safe { background: #e6ffe6; color: var(--safe); }
+        .threat { background: #ffe6e6; color: var(--danger); }
+        .warning { background: #fff3e0; color: var(--warning); }
+        .dark-mode .safe { background: #1a3c34; }
+        .dark-mode .threat { background: #3c1a1a; }
+        .dark-mode .warning { background: #3c2f1a; }
+        #details {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+            display: none;
+        }
+        .dark-mode #details {
+            color: #aaa;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 15px 0;
+            display: none;
+            position: relative;
+        }
+        .dark-mode .progress-bar {
+            background: #444;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0;
+            transition: width 0.1s ease;
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .log, .quarantine, .settings, .report, .threat-feed {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .dark-mode .log, .dark-mode .quarantine, .dark-mode .settings, .dark-mode .report, .dark-mode .threat-feed {
+            background: #2a2a2a;
+        }
+        .log ul, .quarantine ul, .report ul, .threat-feed ul {
+            list-style: none;
+            padding: 0;
+        }
+        .log li, .quarantine li, .report li, .threat-feed li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .dark-mode .log li, .dark-mode .quarantine li, .dark-mode .report li, .dark-mode .threat-feed li {
+            border-bottom: 1px solid #444;
+        }
+        .remove-btn, .export-btn {
+            background: var(--danger);
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+        .remove-btn:hover, .export-btn:hover {
+            background: #b71c1c;
+        }
+        .tips {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f8e9;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .dark-mode .tips {
+            background: #1a3c34;
+        }
+        .settings-grid {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        .real-time-status {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .container { flex-direction: column; margin: 10px auto; }
+            .sidebar { 
+                width: 100%; 
+                position: fixed; 
+                top: 0; 
+                left: 0; 
+                height: 100%; 
+                transform: translateX(-100%); 
+            }
+            .sidebar.visible { transform: translateX(0); }
+            .content { padding: 60px 10px 10px; }
+            .menu-toggle { display: block; }
+        }
+        @media (max-width: 480px) {
+            .container { width: 95%; }
+            .scan-btn, .action-btn { padding: 10px; }
+            .result { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash">
+        <h1><i class="fa-solid fa-shield-virus"></i> Guardian Antivirus Pro</h1>
+        <p id="splash-text">Initializing your advanced security suite...</p>
+        <div class="progress-bar">
+            <div class="progress" id="splash-progress"></div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+    <div class="container">
+        <div class="sidebar">
+            <h1><i class="fa-solid fa-shield-virus"></i> Guardian AV</h1>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="openTab('quick-scan')">Quick Scan</button>
+                <button class="tab-btn" onclick="openTab('url-scan')">URL Scan</button>
+                <button class="tab-btn" onclick="openTab('file-scan')">File Scan</button>
+                <button class="tab-btn" onclick="openTab('system-scan')">System Scan</button>
+                <button class="tab-btn" onclick="openTab('real-time')">Real-Time</button>
+                <button class="tab-btn" onclick="openTab('quarantine')">Quarantine</button>
+                <button class="tab-btn" onclick="openTab('network-monitor')">Network Monitor</button>
+                <button class="tab-btn" onclick="openTab('extension-scan')">Extension Scan</button>
+                <button class="tab-btn" onclick="openTab('firewall-monitor')">Firewall</button>
+                <button class="tab-btn" onclick="openTab('privacy-check')">Privacy Check</button>
+                <button class="tab-btn" onclick="openTab('usb-scanner')">USB Scanner</button>
+                <button class="tab-btn" onclick="openTab('password-checker')">Password Checker</button>
+                <button class="tab-btn" onclick="openTab('performance-monitor')">Performance</button>
+                <button class="tab-btn" onclick="openTab('vpn-status')">VPN Status</button>
+                <button class="tab-btn" onclick="openTab('history-analyzer')">History Analyzer</button>
+                <button class="tab-btn" onclick="openTab('startup-manager')">Startup Manager</button>
+                <button class="tab-btn" onclick="openTab('threat-feed')">Threat Feed</button>
+                <button class="tab-btn" onclick="openTab('update-checker')">Updates</button>
+                <button class="tab-btn" onclick="openTab('settings')">Settings</button>
+                <button class="tab-btn" onclick="openTab('report')">Report</button>
+            </div>
+        </div>
+        <div class="content">
+            <!-- Quick Scan Tab -->
+            <div id="quick-scan" class="tab-content active">
+                <button class="scan-btn" onclick="quickScan()">Start Quick Scan</button>
+                <div class="progress-bar" id="quick-progress">
+                    <div class="progress" id="quick-progress-fill"></div>
+                    <span class="progress-text" id="quick-progress-text">0%</span>
+                </div>
+                <div id="quick-result" class="result"></div>
+            </div>
+
+            <!-- URL Scan Tab -->
+            <div id="url-scan" class="tab-content">
+                <div class="input-wrapper">
+                    <input type="text" id="urlInput" placeholder="Enter URL to scan (e.g., https://example.com)">
+                    <i class="fa-solid fa-search" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                </div>
+                <button class="scan-btn" onclick="scanURL()">Scan URL</button>
+                <div class="progress-bar" id="url-progress">
+                    <div class="progress" id="url-progress-fill"></div>
+                    <span class="progress-text" id="url-progress-text">0%</span>
+                </div>
+                <div id="url-result" class="result"></div>
+                <div id="details"></div>
+                <div class="tips">
+                    <h4><i class="fa-solid fa-lightbulb"></i> URL Safety Tips</h4>
+                    <ul>
+                        <li>✅ Prefer HTTPS websites.</li>
+                        <li>✅ Avoid free TLDs (.tk, .cf).</li>
+                        <li>✅ Check for phishing keywords.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- File Scan Tab -->
+            <div id="file-scan" class="tab-content">
+                <input type="file" id="fileInput" multiple>
+                <button class="scan-btn" onclick="scanFiles()">Scan Files</button>
+                <div class="progress-bar" id="file-progress">
+                    <div class="progress" id="file-progress-fill"></div>
+                    <span class="progress-text" id="file-progress-text">0%</span>
+                </div>
+                <div id="file-result" class="result"></div>
+            </div>
+
+            <!-- System Scan Tab -->
+            <div id="system-scan" class="tab-content">
+                <button class="scan-btn" onclick="scanSystem()">Full Device Scan</button>
+                <div class="progress-bar" id="system-progress">
+                    <div class="progress" id="system-progress-fill"></div>
+                    <span class="progress-text" id="system-progress-text">0%</span>
+                </div>
+                <div id="system-result" class="result"></div>
+            </div>
+
+            <!-- Real-Time Scan Tab -->
+            <div id="real-time" class="tab-content">
+                <button class="action-btn" onclick="toggleRealTime()" id="real-time-toggle">Enable Real-Time Scan</button>
+                <div class="real-time-status" id="real-time-status">Status: Disabled</div>
+                <div id="real-time-result" class="result"></div>
+            </div>
+
+            <!-- Quarantine Tab -->
+            <div id="quarantine" class="tab-content">
+                <h4><i class="fa-solid fa-lock"></i> Quarantined Items</h4>
+                <ul id="quarantine-list"></ul>
+                <button class="action-btn" onclick="clearQuarantine()">Clear Quarantine</button>
+            </div>
+
+            <!-- Network Monitor Tab -->
+            <div id="network-monitor" class="tab-content">
+                <button class="action-btn" onclick="startNetworkMonitor()" id="network-monitor-toggle">Start Monitoring</button>
+                <div class="progress-bar" id="network-progress">
+                    <div class="progress" id="network-progress-fill"></div>
+                    <span class="progress-text" id="network-progress-text">0%</span>
+                </div>
+                <div id="network-result" class="result"></div>
+                <ul id="network-log"></ul>
+            </div>
+
+            <!-- Extension Scan Tab -->
+            <div id="extension-scan" class="tab-content">
+                <button class="scan-btn" onclick="scanExtensions()">Scan Extensions</button>
+                <div id="extension-result" class="result"></div>
+                <ul id="extension-list"></ul>
+            </div>
+
+            <!-- Firewall Monitor Tab -->
+            <div id="firewall-monitor" class="tab-content">
+                <button class="action-btn" onclick="monitorFirewall()" id="firewall-monitor-toggle">Monitor Firewall</button>
+                <div id="firewall-result" class="result"></div>
+                <ul id="firewall-log"></ul>
+            </div>
+
+            <!-- Privacy Check Tab -->
+            <div id="privacy-check" class="tab-content">
+                <button class="scan-btn" onclick="checkPrivacy()">Check Privacy</button>
+                <div id="privacy-result" class="result"></div>
+                <ul id="privacy-issues"></ul>
+            </div>
+
+            <!-- USB Scanner Tab -->
+            <div id="usb-scanner" class="tab-content">
+                <button class="scan-btn" onclick="scanUSB()">Scan USB Devices</button>
+                <div class="progress-bar" id="usb-progress">
+                    <div class="progress" id="usb-progress-fill"></div>
+                    <span class="progress-text" id="usb-progress-text">0%</span>
+                </div>
+                <div id="usb-result" class="result"></div>
+            </div>
+
+            <!-- Password Checker Tab -->
+            <div id="password-checker" class="tab-content">
+                <div class="input-wrapper">
+                    <input type="text" id="passwordInput" placeholder="Enter password to check">
+                    <i class="fa-solid fa-lock" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                </div>
+                <button class="scan-btn" onclick="checkPassword()">Check Password Strength</button>
+                <div id="password-result" class="result"></div>
+            </div>
+
+            <!-- Performance Monitor Tab -->
+            <div id="performance-monitor" class="tab-content">
+                <button class="action-btn" onclick="monitorPerformance()" id="performance-monitor-toggle">Start Performance Monitor</button>
+                <div id="performance-result" class="result"></div>
+                <ul id="performance-stats"></ul>
+            </div>
+
+            <!-- VPN Status Tab -->
+            <div id="vpn-status" class="tab-content">
+                <button class="action-btn" onclick="checkVPNStatus()">Check VPN Status</button>
+                <div id="vpn-result" class="result"></div>
+            </div>
+
+            <!-- Browser History Analyzer Tab -->
+            <div id="history-analyzer" class="tab-content">
+                <button class="scan-btn" onclick="analyzeHistory()">Analyze Browser History</button>
+                <div id="history-result" class="result"></div>
+                <ul id="history-issues"></ul>
+            </div>
+
+            <!-- Startup Manager Tab -->
+            <div id="startup-manager" class="tab-content">
+                <button class="action-btn" onclick="manageStartup()">Manage Startup Items</button>
+                <div id="startup-result" class="result"></div>
+                <ul id="startup-items"></ul>
+            </div>
+
+            <!-- Threat Feed Tab -->
+            <div id="threat-feed" class="tab-content">
+                <h4><i class="fa-solid fa-globe"></i> Global Threat Intelligence</h4>
+                <ul id="threat-feed-list"></ul>
+            </div>
+
+            <!-- Update Checker Tab -->
+            <div id="update-checker" class="tab-content">
+                <button class="action-btn" onclick="checkUpdates()">Check for Updates</button>
+                <div id="update-result" class="result"></div>
+                <div class="tips">
+                    <h4><i class="fa-solid fa-info-circle"></i> Update Status</h4>
+                    <p id="update-status">Current Version: 1.20.3</p>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content">
+                <div class="settings-grid">
+                    <label><input type="checkbox" id="autoQuarantine" onchange="saveSettings()"> Auto-Quarantine Threats</label>
+                    <label><input type="checkbox" id="verboseLog" onchange="saveSettings()"> Verbose Logging</label>
+                    <label><input type="checkbox" id="disableAnimations" onchange="toggleAnimations()"> Disable Animations</label>
+                    <label><input type="checkbox" id="darkMode" onchange="toggleDarkMode()"> Dark Mode</label>
+                    <label><input type="text" id="customTLDs" placeholder="Custom suspicious TLDs (e.g., .xyz, .tk)"><button class="action-btn" onclick="addCustomTLDs()">Add</button></label>
+                    <div>
+                        <label>Schedule Scan:</label>
+                        <input type="datetime-local" id="scanSchedule">
+                        <button class="action-btn" onclick="scheduleScan()">Schedule</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Tab -->
+            <div id="report" class="tab-content">
+                <textarea id="reportInput" rows="4" placeholder="Paste URLs or file names to scan (one per line)"></textarea>
+                <button class="action-btn" onclick="generateReport()">Generate Report</button>
+                <div id="report-result" class="result"></div>
+                <ul id="report-list"></ul>
+                <button class="export-btn" id="exportReport" onclick="exportReport()" style="display: none;">Export as CSV</button>
+            </div>
+
+            <!-- Scan Log -->
+            <div class="log">
+                <h4><i class="fa-solid fa-list"></i> Scan Log</h4>
+                <ul id="scan-log"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scanLog = JSON.parse(localStorage.getItem('scanLog')) || [];
+        let quarantine = JSON.parse(localStorage.getItem('quarantine')) || [];
+        let settings = JSON.parse(localStorage.getItem('settings')) || { 
+            autoQuarantine: true, 
+            verboseLog: false, 
+            disableAnimations: false, 
+            darkMode: false 
+        };
+        let realTimeActive = false;
+        let networkMonitorActive = false;
+        let firewallMonitorActive = false;
+        let performanceMonitorActive = false;
+        let reportData = [];
+        let networkInterval, firewallInterval, performanceInterval;
+
+        // Detection Data
+        const suspiciousTLDs = ['.xyz', '.tk', '.ml', '.cf', '.gq', '.ga', '.ru'].concat(JSON.parse(localStorage.getItem('customTLDs')) || []);
+        const phishingKeywords = ['free', 'win', 'bonus', 'click', 'login', 'verify', 'account', 'secure', 'update', 'reset', 'banking', 'paypal', 'amazon'];
+        const maliciousFileTypes = ['.exe', '.bat', '.vbs', '.scr', '.com', '.dll', '.js'];
+        const systemChecks = ['Registry', 'Processes', 'Network', 'Startup', 'Temp Files', 'Browser Cache', 'Memory', 'Disk'];
+        const quickChecks = ['Temp Files', 'Browser Cache', 'Memory'];
+
+        // Utility Functions
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('visible');
+            document.querySelector('.sidebar').classList.toggle('hidden');
+        }
+
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`button[onclick="openTab('${tabName}')"]`).classList.add('active');
+            if (window.innerWidth <= 768) toggleSidebar();
+        }
+
+        function updateLog(message, type) {
+            scanLog.unshift({ message, type, timestamp: new Date().toLocaleString() });
+            if (scanLog.length > 15) scanLog.pop();
+            renderLog();
+            localStorage.setItem('scanLog', JSON.stringify(scanLog));
+        }
+
+        function renderLog() {
+            const logList = document.getElementById('scan-log');
+            logList.innerHTML = '';
+            scanLog.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span style="color: ${item.type === 'safe' ? '#2e7d32' : item.type === 'threat' ? '#d32f2f' : '#ef6c00'}">${item.timestamp}: ${item.message}</span>`;
+                logList.appendChild(li);
+            });
+        }
+
+        function addToQuarantine(item, type) {
+            if (settings.autoQuarantine) {
+                quarantine.push({ item, type, timestamp: new Date().toLocaleString() });
+                renderQuarantine();
+                localStorage.setItem('quarantine', JSON.stringify(quarantine));
+            }
+        }
+
+        function removeFromQuarantine(index) {
+            quarantine.splice(index, 1);
+            renderQuarantine();
+            localStorage.setItem('quarantine', JSON.stringify(quarantine));
+            updateLog(`Quarantine item ${index + 1} removed`, 'safe');
+        }
+
+        function clearQuarantine() {
+            quarantine = [];
+            renderQuarantine();
+            localStorage.setItem('quarantine', JSON.stringify(quarantine));
+            updateLog('Quarantine cleared', 'safe');
+        }
+
+        function renderQuarantine() {
+            const quarantineList = document.getElementById('quarantine-list');
+            quarantineList.innerHTML = quarantine.length === 0 ? '<li>No items in quarantine</li>' : '';
+            quarantine.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span style="color: ${item.type === 'threat' ? '#d32f2f' : '#ef6c00'}">${item.timestamp}: ${item.item} (${item.type})</span>
+                    <button class="remove-btn" onclick="removeFromQuarantine(${index})">Remove</button>
+                `;
+                quarantineList.appendChild(li);
+            });
+        }
+
+        function saveSettings() {
+            settings.autoQuarantine = document.getElementById('autoQuarantine').checked;
+            settings.verboseLog = document.getElementById('verboseLog').checked;
+            settings.darkMode = document.getElementById('darkMode').checked;
+            localStorage.setItem('settings', JSON.stringify(settings));
+        }
+
+        function addCustomTLDs() {
+            const input = document.getElementById('customTLDs').value.trim();
+            if (!input) {
+                updateLog('Custom TLDs update failed: No input', 'warning');
+                return;
+            }
+            suspiciousTLDs.push(...input.split(',').map(tld => '.' + tld.trim().toLowerCase()));
+            localStorage.setItem('customTLDs', JSON.stringify(suspiciousTLDs.filter(tld => tld.startsWith('.'))));
+            document.getElementById('customTLDs').value = '';
+            updateLog('Custom TLDs updated', 'safe');
+        }
+
+        function toggleAnimations() {
+            const disable = document.getElementById('disableAnimations').checked;
+            document.body.style.animation = disable ? 'none' : '';
+            settings.disableAnimations = disable;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            updateLog(`Animations ${disable ? 'disabled' : 'enabled'}`, 'safe');
+        }
+
+        function toggleDarkMode() {
+            const enable = document.getElementById('darkMode').checked;
+            document.body.classList.toggle('dark-mode', enable);
+            document.querySelector('.container').classList.toggle('dark-mode', enable);
+            settings.darkMode = enable;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            updateLog(`Dark mode ${enable ? 'enabled' : 'disabled'}`, 'safe');
+        }
+
+        function scheduleScan() {
+            const schedule = document.getElementById('scanSchedule').value;
+            if (!schedule) {
+                updateLog('Scan scheduling failed: No date selected', 'warning');
+                return;
+            }
+            const scanTime = new Date(schedule).getTime();
+            const now = Date.now();
+            if (scanTime <= now) {
+                updateLog('Scan scheduling failed: Past date selected', 'warning');
+                return;
+            }
+            setTimeout(() => {
+                scanSystem();
+                updateLog('Scheduled system scan executed', 'safe');
+            }, scanTime - now);
+            updateLog(`System scan scheduled for ${new Date(schedule).toLocaleString()}`, 'safe');
+        }
+
+        function animateProgress(progressBarId, callback) {
+            const progressBar = document.getElementById(progressBarId);
+            const progressFill = document.getElementById(`${progressBarId}-fill`);
+            const progressText = document.getElementById(`${progressBarId}-text`);
+            progressBar.style.display = 'block';
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    progressBar.style.display = 'none';
+                    callback();
+                } else {
+                    width += Math.random() * 5 + 1;
+                    width = Math.min(width, 100);
+                    progressFill.style.width = `${width}%`;
+                    progressText.textContent = `${Math.floor(width)}%`;
+                }
+            }, 50);
+            return interval;
+        }
+
+        // Feature Functions
+        async function quickScan() {
+            const btn = document.querySelector('#quick-scan .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('quick-result');
+            resultDiv.style.display = 'none';
+
+            animateProgress('quick-progress', () => {
+                let threats = 0;
+                let warnings = 0;
+
+                quickChecks.forEach(check => {
+                    const random = Math.random();
+                    if (random > 0.95) {
+                        threats++;
+                        addToQuarantine(`${check} anomaly`, 'threat');
+                        updateLog(`Quick scan: ${check} - Threat detected`, 'threat');
+                    } else if (random > 0.85) {
+                        warnings++;
+                        addToQuarantine(`${check} issue`, 'warning');
+                        updateLog(`Quick scan: ${check} - Suspicious activity`, 'warning');
+                    } else if (settings.verboseLog) {
+                        updateLog(`Quick scan: ${check} - Safe`, 'safe');
+                    }
+                });
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} Detected!`
+                    : warnings > 0 
+                        ? `⚠️ ${warnings} Warning${warnings > 1 ? 's' : ''} Found!`
+                        : '✅ Quick Scan Clean!';
+                resultDiv.className = threats > 0 ? 'threat' : warnings > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+                updateLog('Quick scan completed', 'safe');
+                btn.disabled = false;
+            });
+        }
+
+        async function scanURL() {
+            const url = document.getElementById('urlInput').value.trim();
+            const btn = document.querySelector('#url-scan .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('url-result');
+            const detailsDiv = document.getElementById('details');
+            resultDiv.style.display = 'none';
+            detailsDiv.style.display = 'none';
+
+            if (!url) {
+                resultDiv.textContent = '⚠️ Please enter a URL!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('URL scan failed: No URL entered', 'warning');
+                btn.disabled = false;
+                return;
+            }
+
+            const urlPattern = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/.*)?$/;
+            if (!urlPattern.test(url)) {
+                resultDiv.textContent = '❌ Invalid URL format!';
+                resultDiv.className = 'threat';
+                resultDiv.style.display = 'block';
+                updateLog('URL scan failed: Invalid format', 'threat');
+                btn.disabled = false;
+                return;
+            }
+
+            animateProgress('url-progress', () => {
+                const normalizedUrl = url.startsWith('http') ? url : 'https://' + url;
+                const urlObj = new URL(normalizedUrl);
+                const domain = urlObj.hostname;
+                const path = urlObj.pathname.toLowerCase();
+
+                let status, details, className;
+                if (!normalizedUrl.startsWith('https://')) {
+                    status = '❌ Threat Detected!';
+                    details = 'No HTTPS - high phishing risk.';
+                    className = 'threat';
+                    addToQuarantine(normalizedUrl, 'threat');
+                } else if (suspiciousTLDs.some(tld => domain.endsWith(tld))) {
+                    status = '⚠️ Suspicious URL!';
+                    details = `High-risk TLD (${domain.split('.').pop()}) detected.`;
+                    className = 'warning';
+                    addToQuarantine(normalizedUrl, 'warning');
+                } else if (phishingKeywords.some(keyword => normalizedUrl.toLowerCase().includes(keyword)) || /[^a-zA-Z0-9-.]/.test(domain)) {
+                    status = '⚠️ Suspicious URL!';
+                    details = 'Contains phishing keywords or unusual characters.';
+                    className = 'warning';
+                    addToQuarantine(normalizedUrl, 'warning');
+                } else if (path.includes('php') || path.includes('login') || path.length > 50) {
+                    status = '⚠️ Suspicious URL!';
+                    details = 'Unusual path characteristics.';
+                    className = 'warning';
+                    addToQuarantine(normalizedUrl, 'warning');
+                } else {
+                    status = '✅ URL is Safe';
+                    details = 'No threats detected.';
+                    className = 'safe';
+                }
+
+                resultDiv.textContent = status;
+                resultDiv.className = className;
+                resultDiv.style.display = 'block';
+                detailsDiv.textContent = details;
+                detailsDiv.style.display = 'block';
+                updateLog(`URL scan: ${normalizedUrl} - ${className}`, className);
+                btn.disabled = false;
+            });
+        }
+
+        async function scanFiles() {
+            const files = document.getElementById('fileInput').files;
+            const btn = document.querySelector('#file-scan .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('file-result');
+            resultDiv.style.display = 'none';
+
+            if (files.length === 0) {
+                resultDiv.textContent = '⚠️ Please select files!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('File scan failed: No files selected', 'warning');
+                btn.disabled = false;
+                return;
+            }
+
+            animateProgress('file-progress', () => {
+                let threats = 0;
+                let warnings = 0;
+                let scanned = 0;
+
+                Array.from(files).forEach(file => {
+                    scanned++;
+                    const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+                    const fileName = file.name.toLowerCase();
+                    const fileSize = file.size;
+
+                    if (maliciousFileTypes.includes(fileExt)) {
+                        threats++;
+                        addToQuarantine(file.name, 'threat');
+                        updateLog(`File scan: ${file.name} - Threat (malicious extension)`, 'threat');
+                    } else if (fileSize > 10000000 || fileName.includes('virus') || fileName.includes('hack')) {
+                        warnings++;
+                        addToQuarantine(file.name, 'warning');
+                        updateLog(`File scan: ${file.name} - Suspicious (size or name)`, 'warning');
+                    } else {
+                        updateLog(`File scan: ${file.name} - Safe`, 'safe');
+                    }
+                });
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} Detected!`
+                    : warnings > 0 
+                        ? `⚠️ ${warnings} Suspicious File${warnings > 1 ? 's' : ''} Found!`
+                        : `✅ All ${scanned} File${scanned > 1 ? 's' : ''} Safe!`;
+                resultDiv.className = threats > 0 ? 'threat' : warnings > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+                updateLog('File scan completed', 'safe');
+                btn.disabled = false;
+            });
+        }
+
+        async function scanSystem() {
+            const btn = document.querySelector('#system-scan .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('system-result');
+            resultDiv.style.display = 'none';
+
+            animateProgress('system-progress', () => {
+                let threats = 0;
+                let warnings = 0;
+
+                systemChecks.forEach(check => {
+                    const random = Math.random();
+                    if (random > 0.9) {
+                        threats++;
+                        addToQuarantine(`${check} anomaly`, 'threat');
+                        updateLog(`System scan: ${check} - Threat detected`, 'threat');
+                    } else if (random > 0.7) {
+                        warnings++;
+                        addToQuarantine(`${check} issue`, 'warning');
+                        updateLog(`System scan: ${check} - Suspicious activity`, 'warning');
+                    } else if (settings.verboseLog) {
+                        updateLog(`System scan: ${check} - Safe`, 'safe');
+                    }
+                });
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} Detected!`
+                    : warnings > 0 
+                        ? `⚠️ ${warnings} Warning${warnings > 1 ? 's' : ''} Found!`
+                        : '✅ Device is Clean!';
+                resultDiv.className = threats > 0 ? 'threat' : warnings > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+                updateLog('Full device scan completed', 'safe');
+                btn.disabled = false;
+            });
+        }
+
+        function toggleRealTime() {
+            realTimeActive = !realTimeActive;
+            const toggleBtn = document.getElementById('real-time-toggle');
+            const statusDiv = document.getElementById('real-time-status');
+            toggleBtn.textContent = realTimeActive ? 'Disable Real-Time Scan' : 'Enable Real-Time Scan';
+            statusDiv.textContent = `Status: ${realTimeActive ? 'Enabled' : 'Disabled'}`;
+            statusDiv.style.color = realTimeActive ? '#2e7d32' : '#d32f2f';
+            updateLog(`Real-time scan ${realTimeActive ? 'enabled' : 'disabled'}`, 'safe');
+            if (realTimeActive) startRealTimeScan();
+        }
+
+        function startRealTimeScan() {
+            setInterval(async () => {
+                if (!realTimeActive) return;
+                const resultDiv = document.getElementById('real-time-result');
+                resultDiv.style.display = 'none';
+
+                try {
+                    const clipboardText = await navigator.clipboard.readText();
+                    if (clipboardText && clipboardText.match(/^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/.*)?$/)) {
+                        await scanURLClipboard(clipboardText);
+                        const urlResult = document.getElementById('url-result').className;
+                        if (urlResult === 'threat' || urlResult === 'warning') {
+                            resultDiv.textContent = `⚠️ Suspicious URL in clipboard: ${clipboardText}`;
+                            resultDiv.className = 'warning';
+                            resultDiv.style.display = 'block';
+                        }
+                    }
+                } catch (e) {
+                    resultDiv.textContent = '⚠️ Clipboard access denied - enable permissions';
+                    resultDiv.className = 'warning';
+                    resultDiv.style.display = 'block';
+                    updateLog('Real-time scan: Clipboard access denied', 'warning');
+                }
+
+                const randomCheck = systemChecks[Math.floor(Math.random() * systemChecks.length)];
+                const random = Math.random();
+                if (random > 0.95) {
+                    addToQuarantine(`${randomCheck} anomaly`, 'threat');
+                    updateLog(`Real-time scan: ${randomCheck} - Threat detected`, 'threat');
+                    resultDiv.textContent = `❌ Threat detected in ${randomCheck}!`;
+                    resultDiv.className = 'threat';
+                    resultDiv.style.display = 'block';
+                } else if (random > 0.85 && settings.verboseLog) {
+                    updateLog(`Real-time scan: ${randomCheck} - Safe`, 'safe');
+                }
+            }, 3000);
+        }
+
+        async function scanURLClipboard(url) {
+            const resultDiv = document.getElementById('url-result');
+            const detailsDiv = document.getElementById('details');
+            const normalizedUrl = url.startsWith('http') ? url : 'https://' + url;
+            const urlObj = new URL(normalizedUrl);
+            const domain = urlObj.hostname;
+            const path = urlObj.pathname.toLowerCase();
+
+            let status, details, className;
+            if (!normalizedUrl.startsWith('https://')) {
+                status = '❌ Threat Detected!';
+                details = 'No HTTPS - high phishing risk.';
+                className = 'threat';
+                addToQuarantine(normalizedUrl, 'threat');
+            } else if (suspiciousTLDs.some(tld => domain.endsWith(tld))) {
+                status = '⚠️ Suspicious URL!';
+                details = `High-risk TLD (${domain.split('.').pop()}) detected.`;
+                className = 'warning';
+                addToQuarantine(normalizedUrl, 'warning');
+            } else if (phishingKeywords.some(keyword => normalizedUrl.toLowerCase().includes(keyword)) || /[^a-zA-Z0-9-.]/.test(domain)) {
+                status = '⚠️ Suspicious URL!';
+                details = 'Contains phishing keywords or unusual characters.';
+                className = 'warning';
+                addToQuarantine(normalizedUrl, 'warning');
+            } else if (path.includes('php') || path.includes('login') || path.length > 50) {
+                status = '⚠️ Suspicious URL!';
+                details = 'Unusual path characteristics.';
+                className = 'warning';
+                addToQuarantine(normalizedUrl, 'warning');
+            } else {
+                status = '✅ URL is Safe';
+                details = 'No threats detected.';
+                className = 'safe';
+            }
+
+            resultDiv.textContent = status;
+            resultDiv.className = className;
+            detailsDiv.textContent = details;
+        }
+
+        function startNetworkMonitor() {
+            const btn = document.getElementById('network-monitor-toggle');
+            const resultDiv = document.getElementById('network-result');
+            const networkLog = document.getElementById('network-log');
+            resultDiv.style.display = 'none';
+            networkLog.innerHTML = '';
+
+            if (networkMonitorActive) {
+                clearInterval(networkInterval);
+                networkMonitorActive = false;
+                btn.textContent = 'Start Monitoring';
+                updateLog('Network monitoring stopped', 'safe');
+                return;
+            }
+
+            btn.textContent = 'Stop Monitoring';
+            networkMonitorActive = true;
+            animateProgress('network-progress', () => {
+                const suspiciousDomains = ['malware.com', 'phish.net', 'hack.ru'];
+                let threats = 0;
+
+                networkInterval = setInterval(() => {
+                    if (!networkMonitorActive) return;
+                    const randomDomain = suspiciousDomains[Math.floor(Math.random() * suspiciousDomains.length)];
+                    const random = Math.random();
+                    if (random > 0.9) {
+                        threats++;
+                        const li = document.createElement('li');
+                        li.textContent = `${new Date().toLocaleString()}: Suspicious connection to ${randomDomain}`;
+                        li.style.color = '#d32f2f';
+                        networkLog.insertBefore(li, networkLog.firstChild);
+                        addToQuarantine(`Network: ${randomDomain}`, 'threat');
+                        updateLog(`Network monitor: Threat from ${randomDomain}`, 'threat');
+                        resultDiv.textContent = `❌ ${threats} Suspicious Connection${threats > 1 ? 's' : ''} Detected!`;
+                        resultDiv.className = 'threat';
+                        resultDiv.style.display = 'block';
+                    }
+                }, 5000);
+                updateLog('Network monitoring started', 'safe');
+            });
+        }
+
+        function scanExtensions() {
+            const btn = document.querySelector('#extension-scan .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('extension-result');
+            const extensionList = document.getElementById('extension-list');
+            resultDiv.style.display = 'none';
+            extensionList.innerHTML = '';
+
+            const fakeExtensions = [
+                { name: 'AdBlock Pro', risk: Math.random() > 0.9 },
+                { name: 'Dark Theme', risk: Math.random() > 0.9 },
+                { name: 'Coupon Finder', risk: Math.random() > 0.7 }
+            ];
+
+            let threats = 0;
+            fakeExtensions.forEach(ext => {
+                const li = document.createElement('li');
+                if (ext.risk) {
+                    threats++;
+                    li.textContent = `${ext.name} - Suspicious`;
+                    li.style.color = '#d32f2f';
+                    addToQuarantine(`Extension: ${ext.name}`, 'threat');
+                    updateLog(`Extension scan: ${ext.name} - Threat`, 'threat');
+                } else {
+                    li.textContent = `${ext.name} - Safe`;
+                    li.style.color = '#2e7d32';
+                    updateLog(`Extension scan: ${ext.name} - Safe`, 'safe');
+                }
+                extensionList.appendChild(li);
+            });
+
+            resultDiv.textContent = threats > 0 ? `❌ ${threats} Risky Extension${threats > 1 ? 's' : ''} Found!` : '✅ All Extensions Safe!';
+            resultDiv.className = threats > 0 ? 'threat' : 'safe';
+            resultDiv.style.display = 'block';
+            btn.disabled = false;
+        }
+
+        function monitorFirewall() {
+            const btn = document.getElementById('firewall-monitor-toggle');
+            const resultDiv = document.getElementById('firewall-result');
+            const firewallLog = document.getElementById('firewall-log');
+            resultDiv.style.display = 'none';
+            firewallLog.innerHTML = '';
+
+            if (firewallMonitorActive) {
+                clearInterval(firewallInterval);
+                firewallMonitorActive = false;
+                btn.textContent = 'Monitor Firewall';
+                updateLog('Firewall monitoring stopped', 'safe');
+                return;
+            }
+
+            btn.textContent = 'Stop Monitoring';
+            firewallMonitorActive = true;
+            const firewallEvents = ['Unauthorized port access', 'Suspicious inbound traffic', 'Blocked IP attempt'];
+            let threats = 0;
+
+            firewallInterval = setInterval(() => {
+                if (!firewallMonitorActive) return;
+                const randomEvent = firewallEvents[Math.floor(Math.random() * firewallEvents.length)];
+                const random = Math.random();
+                if (random > 0.9) {
+                    threats++;
+                    const li = document.createElement('li');
+                    li.textContent = `${new Date().toLocaleString()}: ${randomEvent}`;
+                    li.style.color = '#d32f2f';
+                    firewallLog.insertBefore(li, firewallLog.firstChild);
+                    addToQuarantine(`Firewall: ${randomEvent}`, 'threat');
+                    updateLog(`Firewall monitor: ${randomEvent}`, 'threat');
+                    resultDiv.textContent = `❌ ${threats} Firewall Threat${threats > 1 ? 's' : ''} Detected!`;
+                    resultDiv.className = 'threat';
+                    resultDiv.style.display = 'block';
+                } else if (settings.verboseLog && random > 0.7) {
+                    updateLog('Firewall monitor: Normal activity', 'safe');
+                }
+            }, 4000);
+            updateLog('Firewall monitoring started', 'safe');
+        }
+
+        function checkPrivacy() {
+            const btn = document.querySelector('#privacy-check .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('privacy-result');
+            const privacyIssues = document.getElementById('privacy-issues');
+            resultDiv.style.display = 'none';
+            privacyIssues.innerHTML = '';
+
+            const privacyChecks = [
+                { name: 'Cookies', risk: Math.random() > 0.9 },
+                { name: 'Location Access', risk: Math.random() > 0.85 },
+                { name: 'Camera Permissions', risk: Math.random() > 0.9 }
+            ];
+
+            let issues = 0;
+            privacyChecks.forEach(check => {
+                const li = document.createElement('li');
+                if (check.risk) {
+                    issues++;
+                    li.textContent = `${check.name} - Potential privacy risk`;
+                    li.style.color = '#ef6c00';
+                    addToQuarantine(`Privacy: ${check.name}`, 'warning');
+                    updateLog(`Privacy check: ${check.name} - Risk detected`, 'warning');
+                } else {
+                    li.textContent = `${check.name} - Secure`;
+                    li.style.color = '#2e7d32';
+                    updateLog(`Privacy check: ${check.name} - Secure`, 'safe');
+                }
+                privacyIssues.appendChild(li);
+            });
+
+            resultDiv.textContent = issues > 0 ? `⚠️ ${issues} Privacy Issue${issues > 1 ? 's' : ''} Found!` : '✅ Privacy is Secure!';
+            resultDiv.className = issues > 0 ? 'warning' : 'safe';
+            resultDiv.style.display = 'block';
+            btn.disabled = false;
+        }
+
+        function scanUSB() {
+            const btn = document.querySelector('#usb-scanner .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('usb-result');
+            resultDiv.style.display = 'none';
+
+            const usbConnected = Math.random() > 0.3;
+            if (!usbConnected) {
+                resultDiv.textContent = '⚠️ No USB devices detected!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('USB scan failed: No devices connected', 'warning');
+                btn.disabled = false;
+                return;
+            }
+
+            animateProgress('usb-progress', () => {
+                const usbDevices = ['USB Drive 1', 'USB Drive 2'];
+                let threats = 0;
+
+                usbDevices.forEach(device => {
+                    const random = Math.random();
+                    if (random > 0.9) {
+                        threats++;
+                        addToQuarantine(`${device} - Malware`, 'threat');
+                        updateLog(`USB scan: ${device} - Threat detected`, 'threat');
+                    } else {
+                        updateLog(`USB scan: ${device} - Safe`, 'safe');
+                    }
+                });
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} on USB Detected!`
+                    : '✅ USB Devices Safe!';
+                resultDiv.className = threats > 0 ? 'threat' : 'safe';
+                resultDiv.style.display = 'block';
+                updateLog('USB scan completed', 'safe');
+                btn.disabled = false;
+            });
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value.trim();
+            const btn = document.querySelector('#password-checker .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('password-result');
+            resultDiv.style.display = 'none';
+
+            if (!password) {
+                resultDiv.textContent = '⚠️ Please enter a password!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('Password check failed: No input', 'warning');
+                btn.disabled = false;
+                return;
+            }
+
+            const lengthScore = password.length >= 12 ? 2 : password.length >= 8 ? 1 : 0;
+            const complexityScore = /[A-Z]/.test(password) + /[a-z]/.test(password) + /[0-9]/.test(password) + /[!@#$%^&*]/.test(password);
+            const totalScore = lengthScore + complexityScore;
+
+            let status, className;
+            if (totalScore >= 5) {
+                status = '✅ Strong Password!';
+                className = 'safe';
+            } else if (totalScore >= 3) {
+                status = '⚠️ Moderate Password';
+                className = 'warning';
+            } else {
+                status = '❌ Weak Password!';
+                className = 'threat';
+            }
+
+            resultDiv.textContent = status;
+            resultDiv.className = className;
+            resultDiv.style.display = 'block';
+            updateLog(`Password check: ${status}`, className);
+            btn.disabled = false;
+        }
+
+        function monitorPerformance() {
+            const btn = document.getElementById('performance-monitor-toggle');
+            const resultDiv = document.getElementById('performance-result');
+            const statsList = document.getElementById('performance-stats');
+            resultDiv.style.display = 'none';
+            statsList.innerHTML = '';
+
+            if (performanceMonitorActive) {
+                clearInterval(performanceInterval);
+                performanceMonitorActive = false;
+                btn.textContent = 'Start Performance Monitor';
+                updateLog('Performance monitoring stopped', 'safe');
+                return;
+            }
+
+            btn.textContent = 'Stop Monitoring';
+            performanceMonitorActive = true;
+            const metrics = [
+                { name: 'CPU Usage', max: 100 },
+                { name: 'Memory Usage', max: 100 },
+                { name: 'Disk Usage', max: 100 }
+            ];
+
+            performanceInterval = setInterval(() => {
+                if (!performanceMonitorActive) return;
+                let issues = 0;
+                statsList.innerHTML = '';
+                metrics.forEach(metric => {
+                    const value = Math.floor(Math.random() * metric.max);
+                    const li = document.createElement('li');
+                    li.textContent = `${metric.name}: ${value}%`;
+                    if (value > 80) {
+                        issues++;
+                        li.style.color = '#ef6c00';
+                        updateLog(`Performance: ${metric.name} high (${value}%)`, 'warning');
+                    } else {
+                        li.style.color = '#2e7d32';
+                        if (settings.verboseLog) updateLog(`Performance: ${metric.name} normal (${value}%)`, 'safe');
+                    }
+                    statsList.appendChild(li);
+                });
+
+                resultDiv.textContent = issues > 0 
+                    ? `⚠️ ${issues} Performance Issue${issues > 1 ? 's' : ''} Detected!`
+                    : '✅ System Performance Optimal!';
+                resultDiv.className = issues > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+            }, 5000);
+            updateLog('Performance monitoring started', 'safe');
+        }
+
+        function checkVPNStatus() {
+            const btn = document.querySelector('#vpn-status .action-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('vpn-result');
+            resultDiv.style.display = 'none';
+
+            setTimeout(() => {
+                const vpnConnected = Math.random() > 0.5;
+                resultDiv.textContent = vpnConnected 
+                    ? '✅ VPN is Active!'
+                    : '⚠️ VPN is Not Connected!';
+                resultDiv.className = vpnConnected ? 'safe' : 'warning';
+                resultDiv.style.display = 'block';
+                updateLog(`VPN status: ${vpnConnected ? 'Active' : 'Not connected'}`, vpnConnected ? 'safe' : 'warning');
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        function analyzeHistory() {
+            const btn = document.querySelector('#history-analyzer .scan-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('history-result');
+            const historyIssues = document.getElementById('history-issues');
+            resultDiv.style.display = 'none';
+            historyIssues.innerHTML = '';
+
+            const fakeHistory = [
+                { url: 'https://safe-site.com', risk: Math.random() > 0.95 },
+                { url: 'http://phishy-site.tk', risk: Math.random() > 0.7 },
+                { url: 'https://example.com', risk: Math.random() > 0.9 }
+            ];
+
+            let issues = 0;
+            fakeHistory.forEach(entry => {
+                const li = document.createElement('li');
+                if (entry.risk) {
+                    issues++;
+                    li.textContent = `${entry.url} - Suspicious`;
+                    li.style.color = '#d32f2f';
+                    addToQuarantine(`History: ${entry.url}`, 'threat');
+                    updateLog(`History analysis: ${entry.url} - Suspicious`, 'threat');
+                } else {
+                    li.textContent = `${entry.url} - Safe`;
+                    li.style.color = '#2e7d32';
+                    updateLog(`History analysis: ${entry.url} - Safe`, 'safe');
+                }
+                historyIssues.appendChild(li);
+            });
+
+            resultDiv.textContent = issues > 0 
+                ? `❌ ${issues} Suspicious History Item${issues > 1 ? 's' : ''} Found!`
+                : '✅ Browser History Safe!';
+            resultDiv.className = issues > 0 ? 'threat' : 'safe';
+            resultDiv.style.display = 'block';
+            updateLog('Browser history analysis completed', 'safe');
+            btn.disabled = false;
+        }
+
+        function manageStartup() {
+            const btn = document.querySelector('#startup-manager .action-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('startup-result');
+            const startupItems = document.getElementById('startup-items');
+            resultDiv.style.display = 'none';
+            startupItems.innerHTML = '';
+
+            const fakeStartup = [
+                { name: 'App1', suspicious: Math.random() > 0.9, disabled: false },
+                { name: 'App2', suspicious: Math.random() > 0.85, disabled: false },
+                { name: 'App3', suspicious: Math.random() > 0.9, disabled: false }
+            ].filter(item => !localStorage.getItem(`startup_${item.name}_disabled`));
+
+            let suspiciousCount = 0;
+            fakeStartup.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span style="color: ${item.suspicious ? '#d32f2f' : '#2e7d32'}">${item.name} - ${item.suspicious ? 'Suspicious' : 'Normal'}</span>
+                    ${item.suspicious ? `<button class="remove-btn" onclick="disableStartup('${item.name}')">Disable</button>` : ''}
+                `;
+                startupItems.appendChild(li);
+                if (item.suspicious) {
+                    suspiciousCount++;
+                    updateLog(`Startup: ${item.name} - Suspicious`, 'threat');
+                } else {
+                    updateLog(`Startup: ${item.name} - Normal`, 'safe');
+                }
+            });
+
+            resultDiv.textContent = suspiciousCount > 0 
+                ? `⚠️ ${suspiciousCount} Suspicious Startup Item${suspiciousCount > 1 ? 's' : ''} Found!`
+                : '✅ Startup Items Safe!';
+            resultDiv.className = suspiciousCount > 0 ? 'warning' : 'safe';
+            resultDiv.style.display = 'block';
+            updateLog('Startup management completed', 'safe');
+            btn.disabled = false;
+        }
+
+        function disableStartup(name) {
+            localStorage.setItem(`startup_${name}_disabled`, 'true');
+            updateLog(`Startup item ${name} disabled`, 'safe');
+            manageStartup();
+        }
+
+        function updateThreatFeed() {
+            const threatList = document.getElementById('threat-feed-list');
+            const threats = [
+                'New phishing campaign targeting banks',
+                'Malware detected in .xyz domains',
+                'Ransomware spike in Europe'
+            ];
+
+            setInterval(() => {
+                const randomThreat = threats[Math.floor(Math.random() * threats.length)];
+                const li = document.createElement('li');
+                li.textContent = `${new Date().toLocaleString()}: ${randomThreat}`;
+                li.style.color = '#ef6c00';
+                threatList.insertBefore(li, threatList.firstChild);
+                if (threatList.children.length > 10) threatList.removeChild(threatList.lastChild);
+            }, 10000);
+        }
+
+        function checkUpdates() {
+            const btn = document.querySelector('#update-checker .action-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('update-result');
+            resultDiv.style.display = 'none';
+
+            setTimeout(() => {
+                const currentVersion = '1.2.3';
+                const latestVersion = Math.random() > 0.5 ? '1.2.4' : currentVersion;
+                if (latestVersion !== currentVersion) {
+                    resultDiv.textContent = `⚠️ Update Available: v${latestVersion}`;
+                    resultDiv.className = 'warning';
+                    updateLog(`Update check: New version ${latestVersion} available`, 'warning');
+                } else {
+                    resultDiv.textContent = '✅ You are up to date!';
+                    resultDiv.className = 'safe';
+                    updateLog('Update check: No updates available', 'safe');
+                }
+                resultDiv.style.display = 'block';
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        async function generateReport() {
+            const input = document.getElementById('reportInput').value.trim();
+            const btn = document.querySelector('#report .action-btn');
+            btn.disabled = true;
+            const resultDiv = document.getElementById('report-result');
+            const reportList = document.getElementById('report-list');
+            const exportBtn = document.getElementById('exportReport');
+            resultDiv.style.display = 'none';
+            exportBtn.style.display = 'none';
+            reportList.innerHTML = '';
+
+            if (!input) {
+                resultDiv.textContent = '⚠️ Please enter items to scan!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('Report generation failed: No input', 'warning');
+                btn.disabled = false;
+                return;
+            }
+
+            const items = input.split('\n').filter(item => item.trim());
+            reportData = [];
+            resultDiv.textContent = 'Generating report...';
+            resultDiv.className = 'safe';
+            resultDiv.style.display = 'block';
+
+            for (const item of items) {
+                let status, type;
+                if (item.match(/^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/.*)?$/)) {
+                    document.getElementById('urlInput').value = item;
+                    await scanURL();
+                    status = document.getElementById('url-result').textContent;
+                    type = document.getElementById('url-result').className;
+                } else {
+                    status = Math.random() > 0.9 ? '❌ Threat Detected!' : Math.random() > 0.7 ? '⚠️ Suspicious!' : '✅ Safe';
+                    type = status.includes('❌') ? 'threat' : status.includes('⚠️') ? 'warning' : 'safe';
+                    updateLog(`Report scan: ${item} - ${type}`, type);
+                    if (type !== 'safe') addToQuarantine(item, type);
+                }
+                reportData.push({ item, status, details: type === 'safe' ? 'No issues' : 'Potential threat' });
+
+                const li = document.createElement('li');
+                li.innerHTML = `<span style="color: ${type === 'safe' ? '#2e7d32' : type === 'threat' ? '#d32f2f' : '#ef6c00'}">${item}: ${status}</span>`;
+                reportList.appendChild(li);
+            }
+
+            resultDiv.textContent = `✅ Report Generated for ${items.length} Items!`;
+            exportBtn.style.display = 'block';
+            btn.disabled = false;
+        }
+
+        function exportReport() {
+            const csv = 'Item,Status,Details\n' + reportData.map(row => `"${row.item}","${row.status.replace(/✅|⚠️|❌/g, '')}","${row.details}"`).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'antivirus_report.csv';
+            link.click();
+            updateLog('Report exported as CSV', 'safe');
+        }
+
+        // Load Initial State
+        window.onload = () => {
+            const splashProgress = document.getElementById('splash-progress');
+            const splashText = document.getElementById('splash-text');
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                splashProgress.style.width = `${progress}%`;
+                if (progress >= 70) splashText.textContent = 'Finalizing security checks...';
+                if (progress >= 100) clearInterval(progressInterval);
+            }, 400);
+
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.querySelector('.container').classList.add('active');
+            }, 5000);
+
+            updateLog('Guardian Antivirus Pro started', 'safe');
+            renderLog();
+            renderQuarantine();
+            updateThreatFeed();
+            document.getElementById('urlInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') scanURL();
+            });
+            document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkPassword();
+            });
+            document.getElementById('autoQuarantine').checked = settings.autoQuarantine;
+            document.getElementById('verboseLog').checked = settings.verboseLog;
+            document.getElementById('disableAnimations').checked = settings.disableAnimations;
+            document.getElementById('darkMode').checked = settings.darkMode;
+            if (settings.disableAnimations) toggleAnimations();
+            if (settings.darkMode) toggleDarkMode();
         };
     </script>
 </body>
+</html>
 </html>
