@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardian Antivirus Pro</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFzONWFxTw==" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        /* Splash Screen */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            animation: fadeOut 3s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        #splash h1 {
+            color: #4CAF50;
+            font-size: 48px;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        #splash p {
+            font-size: 18px;
+            color: #ddd;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            color: #333;
+            animation: slideIn 0.5s ease;
+            display: none;
+        }
+        .container.active {
+            display: block;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 150px;
+        }
+        .tab-btn:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeInContent 0.5s ease;
+        }
+        @keyframes fadeInContent {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="file"], textarea, input[type="datetime-local"] {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus, input[type="file"]:focus, textarea:focus, input[type="datetime-local"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        .scan-btn, .action-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #4CAF50, #66bb6a);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+        .scan-btn:hover, .action-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            animation: bounceIn 0.5s ease;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        .safe { background: #e6ffe6; color: #2e7d32; }
+        .threat { background: #ffe6e6; color: #d32f2f; }
+        .warning { background: #fff3e0; color: #ef6c00; }
+        #details {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 15px 0;
+            display: none;
+            position: relative;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66bb6a);
+            width: 0;
+            transition: width 0.1s ease;
+            animation: scanWave 2s infinite;
+        }
+        @keyframes scanWave {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 0; }
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+        }
+        .log, .quarantine, .settings, .report, .threat-feed {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .log ul, .quarantine ul, .report ul, .threat-feed ul {
+            list-style: none;
+            padding: 0;
+        }
+        .log li, .quarantine li, .report li, .threat-feed li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .remove-btn, .export-btn {
+            background: #e57373;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .remove-btn:hover, .export-btn:hover {
+            background: #d32f2f;
+        }
+        .tips {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f8e9;
+            border-radius: 10px;
+        }
+        .settings-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .real-time-status {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        @media (max-width: 1100px) {
+            .container { width: 95%; }
+            .tab-btn { max-width: 120px; font-size: 14px; }
+        }
+        @media (max-width: 600px) {
+            .tabs { flex-direction: column; gap: 5px; }
+            .tab-btn { max-width: none; }
+            h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash">
+        <h1><i class="fa-solid fa-shield-virus"></i> Guardian Antivirus Pro</h1>
+        <p>Loading your ultimate security solution...</p>
+    </div>
+
+    <div class="container">
+        <h1><i class="fa-solid fa-shield-virus"></i> Guardian Antivirus Pro</h1>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('quick-scan')">Quick Scan</button>
+            <button class="tab-btn" onclick="openTab('url-scan')">URL Scan</button>
+            <button class="tab-btn" onclick="openTab('file-scan')">File Scan</button>
+            <button class="tab-btn" onclick="openTab('system-scan')">System Scan</button>
+            <button class="tab-btn" onclick="openTab('real-time')">Real-Time</button>
+            <button class="tab-btn" onclick="openTab('quarantine')">Quarantine</button>
+            <button class="tab-btn" onclick="openTab('network-monitor')">Network Monitor</button>
+            <button class="tab-btn" onclick="openTab('extension-scan')">Extension Scan</button>
+            <button class="tab-btn" onclick="openTab('firewall-monitor')">Firewall</button>
+            <button class="tab-btn" onclick="openTab('privacy-check')">Privacy Check</button>
+            <button class="tab-btn" onclick="openTab('threat-feed')">Threat Feed</button>
+            <button class="tab-btn" onclick="openTab('update-checker')">Updates</button>
+            <button class="tab-btn" onclick="openTab('settings')">Settings</button>
+            <button class="tab-btn" onclick="openTab('report')">Report</button>
+        </div>
+
+        <!-- Quick Scan Tab -->
+        <div id="quick-scan" class="tab-content active">
+            <button class="scan-btn" onclick="quickScan()">Start Quick Scan</button>
+            <div class="progress-bar" id="quick-progress">
+                <div class="progress" id="quick-progress-fill"></div>
+                <span class="progress-text" id="quick-progress-text">0%</span>
+            </div>
+            <div id="quick-result" class="result"></div>
+        </div>
+
+        <!-- URL Scan Tab -->
+        <div id="url-scan" class="tab-content">
+            <div class="input-wrapper">
+                <input type="text" id="urlInput" placeholder="Enter URL to scan (e.g., https://example.com)">
+                <i class="fa-solid fa-search" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+            </div>
+            <button class="scan-btn" onclick="scanURL()">Scan URL</button>
+            <div class="progress-bar" id="url-progress">
+                <div class="progress" id="url-progress-fill"></div>
+                <span class="progress-text" id="url-progress-text">0%</span>
+            </div>
+            <div id="url-result" class="result"></div>
+            <div id="details"></div>
+            <div class="tips">
+                <h4><i class="fa-solid fa-lightbulb"></i> URL Safety Tips</h4>
+                <ul>
+                    <li>✅ Prefer HTTPS websites.</li>
+                    <li>✅ Avoid free TLDs (.tk, .cf).</li>
+                    <li>✅ Check for phishing keywords.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- File Scan Tab -->
+        <div id="file-scan" class="tab-content">
+            <input type="file" id="fileInput" multiple>
+            <button class="scan-btn" onclick="scanFiles()">Scan Files</button>
+            <div class="progress-bar" id="file-progress">
+                <div class="progress" id="file-progress-fill"></div>
+                <span class="progress-text" id="file-progress-text">0%</span>
+            </div>
+            <div id="file-result" class="result"></div>
+        </div>
+
+        <!-- System Scan Tab -->
+        <div id="system-scan" class="tab-content">
+            <button class="scan-btn" onclick="scanSystem()">Full Device Scan</button>
+            <div class="progress-bar" id="system-progress">
+                <div class="progress" id="system-progress-fill"></div>
+                <span class="progress-text" id="system-progress-text">0%</span>
+            </div>
+            <div id="system-result" class="result"></div>
+        </div>
+
+        <!-- Real-Time Scan Tab -->
+        <div id="real-time" class="tab-content">
+            <button class="action-btn" onclick="toggleRealTime()" id="real-time-toggle">Enable Real-Time Scan</button>
+            <div class="real-time-status" id="real-time-status">Status: Disabled</div>
+            <div id="real-time-result" class="result"></div>
+        </div>
+
+        <!-- Quarantine Tab -->
+        <div id="quarantine" class="tab-content">
+            <h4><i class="fa-solid fa-lock"></i> Quarantined Items</h4>
+            <ul id="quarantine-list"></ul>
+            <button class="action-btn" onclick="clearQuarantine()">Clear Quarantine</button>
+        </div>
+
+        <!-- Network Monitor Tab -->
+        <div id="network-monitor" class="tab-content">
+            <button class="action-btn" onclick="startNetworkMonitor()">Start Monitoring</button>
+            <div class="progress-bar" id="network-progress">
+                <div class="progress" id="network-progress-fill"></div>
+                <span class="progress-text" id="network-progress-text">0%</span>
+            </div>
+            <div id="network-result" class="result"></div>
+            <ul id="network-log"></ul>
+        </div>
+
+        <!-- Extension Scan Tab -->
+        <div id="extension-scan" class="tab-content">
+            <button class="scan-btn" onclick="scanExtensions()">Scan Extensions</button>
+            <div id="extension-result" class="result"></div>
+            <ul id="extension-list"></ul>
+        </div>
+
+        <!-- Firewall Monitor Tab -->
+        <div id="firewall-monitor" class="tab-content">
+            <button class="action-btn" onclick="monitorFirewall()">Monitor Firewall</button>
+            <div id="firewall-result" class="result"></div>
+            <ul id="firewall-log"></ul>
+        </div>
+
+        <!-- Privacy Check Tab -->
+        <div id="privacy-check" class="tab-content">
+            <button class="scan-btn" onclick="checkPrivacy()">Check Privacy</button>
+            <div id="privacy-result" class="result"></div>
+            <ul id="privacy-issues"></ul>
+        </div>
+
+        <!-- Threat Feed Tab -->
+        <div id="threat-feed" class="tab-content">
+            <h4><i class="fa-solid fa-globe"></i> Global Threat Intelligence</h4>
+            <ul id="threat-feed-list"></ul>
+        </div>
+
+        <!-- Update Checker Tab -->
+        <div id="update-checker" class="tab-content">
+            <button class="action-btn" onclick="checkUpdates()">Check for Updates</button>
+            <div id="update-result" class="result"></div>
+            <div class="tips">
+                <h4><i class="fa-solid fa-info-circle"></i> Update Status</h4>
+                <p id="update-status">Current Version: 1.2.3</p>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content">
+            <div class="settings-grid">
+                <label><input type="checkbox" id="autoQuarantine" onchange="saveSettings()"> Auto-Quarantine Threats</label>
+                <label><input type="checkbox" id="verboseLog" onchange="saveSettings()"> Verbose Logging</label>
+                <label><input type="checkbox" id="disableAnimations" onchange="toggleAnimations()"> Disable Animations</label>
+                <label><input type="text" id="customTLDs" placeholder="Custom suspicious TLDs (e.g., .xyz, .tk)"><button class="action-btn" onclick="addCustomTLDs()">Add</button></label>
+                <div>
+                    <label>Schedule Scan:</label>
+                    <input type="datetime-local" id="scanSchedule">
+                    <button class="action-btn" onclick="scheduleScan()">Schedule</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Tab -->
+        <div id="report" class="tab-content">
+            <textarea id="reportInput" rows="4" placeholder="Paste URLs or file names to scan (one per line)"></textarea>
+            <button class="action-btn" onclick="generateReport()">Generate Report</button>
+            <div id="report-result" class="result"></div>
+            <ul id="report-list"></ul>
+            <button class="export-btn" id="exportReport" onclick="exportReport()" style="display: none;">Export as CSV</button>
+        </div>
+
+        <!-- Scan Log -->
+        <div class="log">
+            <h4><i class="fa-solid fa-list"></i> Scan Log</h4>
+            <ul id="scan-log"></ul>
+        </div>
+    </div>
+
+    <script>
+        let scanLog = JSON.parse(localStorage.getItem('scanLog')) || [];
+        let quarantine = JSON.parse(localStorage.getItem('quarantine')) || [];
+        let settings = JSON.parse(localStorage.getItem('settings')) || { autoQuarantine: true, verboseLog: false, disableAnimations: false };
+        let realTimeActive = false;
+        let reportData = [];
+
+        // Detection Data
+        let suspiciousTLDs = ['.xyz', '.tk', '.ml', '.cf', '.gq', '.ga', '.ru'].concat(JSON.parse(localStorage.getItem('customTLDs')) || []);
+        const phishingKeywords = ['free', 'win', 'bonus', 'click', 'login', 'verify', 'account', 'secure', 'update', 'reset', 'banking', 'paypal', 'amazon'];
+        const maliciousFileTypes = ['.exe', '.bat', '.vbs', '.scr', '.com', '.dll', '.js'];
+        const systemChecks = ['Registry', 'Processes', 'Network', 'Startup', 'Temp Files', 'Browser Cache', 'Memory', 'Disk'];
+        const quickChecks = ['Temp Files', 'Browser Cache', 'Memory'];
+
+        // Tab Navigation
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`button[onclick="openTab('${tabName}')"]`).classList.add('active');
+        }
+
+        // Log Management
+        function updateLog(message, type) {
+            scanLog.unshift({ message, type, timestamp: new Date().toLocaleString() });
+            if (scanLog.length > 15) scanLog.pop();
+            renderLog();
+            localStorage.setItem('scanLog', JSON.stringify(scanLog));
+        }
+
+        function renderLog() {
+            const logList = document.getElementById('scan-log');
+            logList.innerHTML = '';
+            scanLog.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span style="color: ${item.type === 'safe' ? '#2e7d32' : item.type === 'threat' ? '#d32f2f' : '#ef6c00'}">${item.timestamp}: ${item.message}</span>`;
+                logList.appendChild(li);
+            });
+        }
+
+        // Quarantine Management
+        function addToQuarantine(item, type) {
+            if (settings.autoQuarantine) {
+                quarantine.push({ item, type, timestamp: new Date().toLocaleString() });
+                renderQuarantine();
+                localStorage.setItem('quarantine', JSON.stringify(quarantine));
+            }
+        }
+
+        function removeFromQuarantine(index) {
+            quarantine.splice(index, 1);
+            renderQuarantine();
+            localStorage.setItem('quarantine', JSON.stringify(quarantine));
+        }
+
+        function clearQuarantine() {
+            quarantine = [];
+            renderQuarantine();
+            localStorage.setItem('quarantine', JSON.stringify(quarantine));
+            updateLog('Quarantine cleared', 'safe');
+        }
+
+        function renderQuarantine() {
+            const quarantineList = document.getElementById('quarantine-list');
+            quarantineList.innerHTML = '';
+            quarantine.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span style="color: ${item.type === 'threat' ? '#d32f2f' : '#ef6c00'}">${item.timestamp}: ${item.item} (${item.type})</span>
+                    <button class="remove-btn" onclick="removeFromQuarantine(${index})">Remove</button>
+                `;
+                quarantineList.appendChild(li);
+            });
+        }
+
+        // Settings Management
+        function saveSettings() {
+            settings.autoQuarantine = document.getElementById('autoQuarantine').checked;
+            settings.verboseLog = document.getElementById('verboseLog').checked;
+            localStorage.setItem('settings', JSON.stringify(settings));
+        }
+
+        function addCustomTLDs() {
+            const input = document.getElementById('customTLDs').value.trim();
+            if (input) {
+                suspiciousTLDs = suspiciousTLDs.concat(input.split(',').map(tld => '.' + tld.trim().toLowerCase()));
+                localStorage.setItem('customTLDs', JSON.stringify(suspiciousTLDs.filter(tld => tld.startsWith('.'))));
+                document.getElementById('customTLDs').value = '';
+                updateLog('Custom TLDs updated', 'safe');
+            }
+        }
+
+        function toggleAnimations() {
+            const disable = document.getElementById('disableAnimations').checked;
+            document.body.style.animation = disable ? 'none' : '';
+            settings.disableAnimations = disable;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            updateLog(`Animations ${disable ? 'disabled' : 'enabled'}`, 'safe');
+        }
+
+        function scheduleScan() {
+            const schedule = document.getElementById('scanSchedule').value;
+            if (!schedule) {
+                updateLog('Scan scheduling failed: No date selected', 'warning');
+                return;
+            }
+            const scanTime = new Date(schedule).getTime();
+            const now = Date.now();
+            if (scanTime <= now) {
+                updateLog('Scan scheduling failed: Past date selected', 'warning');
+                return;
+            }
+            setTimeout(() => {
+                scanSystem();
+                updateLog('Scheduled system scan executed', 'safe');
+            }, scanTime - now);
+            updateLog(`System scan scheduled for ${new Date(schedule).toLocaleString()}`, 'safe');
+        }
+
+        // Progress Animation
+        function animateProgress(progressBarId, callback) {
+            const progressFill = document.getElementById(`${progressBarId}-fill`);
+            const progressText = document.getElementById(`${progressBarId}-text`);
+            document.getElementById(progressBarId).style.display = 'block';
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    document.getElementById(progressBarId).style.display = 'none';
+                    callback();
+                } else {
+                    width += Math.random() * 5 + 1;
+                    width = Math.min(width, 100);
+                    progressFill.style.width = `${width}%`;
+                    progressText.textContent = `${Math.floor(width)}%`;
+                }
+            }, 50);
+        }
+
+        // Quick Scan
+        async function quickScan() {
+            const resultDiv = document.getElementById('quick-result');
+            resultDiv.style.display = 'none';
+
+            animateProgress('quick-progress', () => {
+                let threats = 0;
+                let warnings = 0;
+
+                quickChecks.forEach(check => {
+                    const random = Math.random();
+                    if (random > 0.95) {
+                        threats++;
+                        addToQuarantine(`${check} anomaly`, 'threat');
+                        updateLog(`Quick scan: ${check} - Threat detected`, 'threat');
+                    } else if (random > 0.85) {
+                        warnings++;
+                        addToQuarantine(`${check} issue`, 'warning');
+                        updateLog(`Quick scan: ${check} - Suspicious activity`, 'warning');
+                    } else if (settings.verboseLog) {
+                        updateLog(`Quick scan: ${check} - Safe`, 'safe');
+                    }
+                });
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} Detected!`
+                    : warnings > 0 
+                        ? `⚠️ ${warnings} Warning${warnings > 1 ? 's' : ''} Found!`
+                        : '✅ Quick Scan Clean!';
+                resultDiv.className = threats > 0 ? 'threat' : warnings > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+                updateLog('Quick scan completed', 'safe');
+            });
+        }
+
+        // URL Scan
+        async function scanURL(url = document.getElementById('urlInput').value.trim()) {
+            const resultDiv = document.getElementById('url-result');
+            const detailsDiv = document.getElementById('details');
+            resultDiv.style.display = 'none';
+            detailsDiv.style.display = 'none';
+
+            if (!url) {
+                resultDiv.textContent = '⚠️ Please enter a URL!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('URL scan failed: No URL entered', 'warning');
+                return;
+            }
+
+            const urlPattern = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/.*)?$/;
+            if (!urlPattern.test(url)) {
+                resultDiv.textContent = '❌ Invalid URL format!';
+                resultDiv.className = 'threat';
+                resultDiv.style.display = 'block';
+                updateLog('URL scan failed: Invalid format', 'threat');
+                return;
+            }
+
+            animateProgress('url-progress', () => {
+                const normalizedUrl = url.startsWith('http') ? url : 'https://' + url;
+                const urlObj = new URL(normalizedUrl);
+                const domain = urlObj.hostname;
+                const path = urlObj.pathname.toLowerCase();
+
+                let status, details, className;
+                if (!normalizedUrl.startsWith('https://')) {
+                    status = '❌ Threat Detected!';
+                    details = 'No HTTPS - high phishing risk.';
+                    className = 'threat';
+                    addToQuarantine(normalizedUrl, 'threat');
+                } else if (suspiciousTLDs.some(tld => domain.endsWith(tld))) {
+                    status = '⚠️ Suspicious URL!';
+                    details = `High-risk TLD (${domain.split('.').pop()}) detected.`;
+                    className = 'warning';
+                    addToQuarantine(normalizedUrl, 'warning');
+                } else if (phishingKeywords.some(keyword => normalizedUrl.toLowerCase().includes(keyword)) || /[^a-zA-Z0-9-.]/.test(domain)) {
+                    status = '⚠️ Suspicious URL!';
+                    details = 'Contains phishing keywords or unusual characters.';
+                    className = 'warning';
+                    addToQuarantine(normalizedUrl, 'warning');
+                } else if (path.includes('php') || path.includes('login') || path.length > 50) {
+                    status = '⚠️ Suspicious URL!';
+                    details = 'Unusual path characteristics.';
+                    className = 'warning';
+                    addToQuarantine(normalizedUrl, 'warning');
+                } else {
+                    status = '✅ URL is Safe';
+                    details = 'No threats detected.';
+                    className = 'safe';
+                }
+
+                resultDiv.textContent = status;
+                resultDiv.className = className;
+                resultDiv.style.display = 'block';
+                detailsDiv.textContent = details;
+                detailsDiv.style.display = 'block';
+                updateLog(`URL scan: ${normalizedUrl} - ${className}`, className);
+            });
+        }
+
+        // File Scan
+        async function scanFiles() {
+            const files = document.getElementById('fileInput').files;
+            const resultDiv = document.getElementById('file-result');
+            resultDiv.style.display = 'none';
+
+            if (files.length === 0) {
+                resultDiv.textContent = '⚠️ Please select files!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('File scan failed: No files selected', 'warning');
+                return;
+            }
+
+            animateProgress('file-progress', () => {
+                let threats = 0;
+                let warnings = 0;
+                let scanned = 0;
+
+                for (const file of files) {
+                    scanned++;
+                    const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+                    const fileName = file.name.toLowerCase();
+                    const fileSize = file.size;
+
+                    if (maliciousFileTypes.includes(fileExt)) {
+                        threats++;
+                        addToQuarantine(file.name, 'threat');
+                        updateLog(`File scan: ${file.name} - Threat (malicious extension)`, 'threat');
+                    } else if (fileSize > 10000000 || fileName.includes('virus') || fileName.includes('hack')) {
+                        warnings++;
+                        addToQuarantine(file.name, 'warning');
+                        updateLog(`File scan: ${file.name} - Suspicious (size or name)`, 'warning');
+                    } else {
+                        updateLog(`File scan: ${file.name} - Safe`, 'safe');
+                    }
+                }
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} Detected!`
+                    : warnings > 0 
+                        ? `⚠️ ${warnings} Suspicious File${warnings > 1 ? 's' : ''} Found!`
+                        : `✅ All ${scanned} File${scanned > 1 ? 's' : ''} Safe!`;
+                resultDiv.className = threats > 0 ? 'threat' : warnings > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+            });
+        }
+
+        // System Scan
+        async function scanSystem() {
+            const resultDiv = document.getElementById('system-result');
+            resultDiv.style.display = 'none';
+
+            animateProgress('system-progress', () => {
+                let threats = 0;
+                let warnings = 0;
+
+                systemChecks.forEach(check => {
+                    const random = Math.random();
+                    if (random > 0.9) {
+                        threats++;
+                        addToQuarantine(`${check} anomaly`, 'threat');
+                        updateLog(`System scan: ${check} - Threat detected`, 'threat');
+                    } else if (random > 0.7) {
+                        warnings++;
+                        addToQuarantine(`${check} issue`, 'warning');
+                        updateLog(`System scan: ${check} - Suspicious activity`, 'warning');
+                    } else if (settings.verboseLog) {
+                        updateLog(`System scan: ${check} - Safe`, 'safe');
+                    }
+                });
+
+                resultDiv.textContent = threats > 0 
+                    ? `❌ ${threats} Threat${threats > 1 ? 's' : ''} Detected!`
+                    : warnings > 0 
+                        ? `⚠️ ${warnings} Warning${warnings > 1 ? 's' : ''} Found!`
+                        : '✅ Device is Clean!';
+                resultDiv.className = threats > 0 ? 'threat' : warnings > 0 ? 'warning' : 'safe';
+                resultDiv.style.display = 'block';
+                updateLog('Full device scan completed', 'safe');
+            });
+        }
+
+        // Real-Time Scan
+        function toggleRealTime() {
+            realTimeActive = !realTimeActive;
+            const toggleBtn = document.getElementById('real-time-toggle');
+            const statusDiv = document.getElementById('real-time-status');
+            toggleBtn.textContent = realTimeActive ? 'Disable Real-Time Scan' : 'Enable Real-Time Scan';
+            statusDiv.textContent = `Status: ${realTimeActive ? 'Enabled' : 'Disabled'}`;
+            statusDiv.style.color = realTimeActive ? '#2e7d32' : '#d32f2f';
+            updateLog(`Real-time scan ${realTimeActive ? 'enabled' : 'disabled'}`, 'safe');
+            if (realTimeActive) startRealTimeScan();
+        }
+
+        function startRealTimeScan() {
+            setInterval(async () => {
+                if (!realTimeActive) return;
+                const resultDiv = document.getElementById('real-time-result');
+                resultDiv.style.display = 'none';
+
+                try {
+                    const clipboardText = await navigator.clipboard.readText();
+                    if (clipboardText && clipboardText.match(/^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/.*)?$/)) {
+                        await scanURL(clipboardText);
+                        const urlResult = document.getElementById('url-result').className;
+                        if (urlResult === 'threat' || urlResult === 'warning') {
+                            resultDiv.textContent = `⚠️ Suspicious URL in clipboard: ${clipboardText}`;
+                            resultDiv.className = 'warning';
+                            resultDiv.style.display = 'block';
+                        }
+                    }
+                } catch (e) {
+                    resultDiv.textContent = '⚠️ Clipboard access denied - enable permissions';
+                    resultDiv.className = 'warning';
+                    resultDiv.style.display = 'block';
+                    updateLog('Real-time scan: Clipboard access denied', 'warning');
+                }
+
+                const randomCheck = systemChecks[Math.floor(Math.random() * systemChecks.length)];
+                const random = Math.random();
+                if (random > 0.95) {
+                    addToQuarantine(`${randomCheck} anomaly`, 'threat');
+                    updateLog(`Real-time scan: ${randomCheck} - Threat detected`, 'threat');
+                    resultDiv.textContent = `❌ Threat detected in ${randomCheck}!`;
+                    resultDiv.className = 'threat';
+                    resultDiv.style.display = 'block';
+                } else if (random > 0.85 && settings.verboseLog) {
+                    updateLog(`Real-time scan: ${randomCheck} - Safe`, 'safe');
+                }
+            }, 3000);
+        }
+
+        // Network Monitor
+        function startNetworkMonitor() {
+            const resultDiv = document.getElementById('network-result');
+            const networkLog = document.getElementById('network-log');
+            resultDiv.style.display = 'none';
+            networkLog.innerHTML = '';
+
+            animateProgress('network-progress', () => {
+                const suspiciousDomains = ['malware.com', 'phish.net', 'hack.ru'];
+                let threats = 0;
+
+                setInterval(() => {
+                    const randomDomain = suspiciousDomains[Math.floor(Math.random() * suspiciousDomains.length)];
+                    const random = Math.random();
+                    if (random > 0.9) {
+                        threats++;
+                        const li = document.createElement('li');
+                        li.textContent = `${new Date().toLocaleString()}: Suspicious connection to ${randomDomain}`;
+                        li.style.color = '#d32f2f';
+                        networkLog.insertBefore(li, networkLog.firstChild);
+                        addToQuarantine(`Network: ${randomDomain}`, 'threat');
+                        updateLog(`Network monitor: Threat from ${randomDomain}`, 'threat');
+                        resultDiv.textContent = `❌ ${threats} Suspicious Connection${threats > 1 ? 's' : ''} Detected!`;
+                        resultDiv.className = 'threat';
+                        resultDiv.style.display = 'block';
+                    }
+                }, 5000);
+                updateLog('Network monitoring started', 'safe');
+            });
+        }
+
+        // Extension Scan
+        function scanExtensions() {
+            const resultDiv = document.getElementById('extension-result');
+            const extensionList = document.getElementById('extension-list');
+            resultDiv.style.display = 'none';
+            extensionList.innerHTML = '';
+
+            const fakeExtensions = [
+                { name: 'AdBlock Pro', risk: Math.random() > 0.9 },
+                { name: 'Dark Theme', risk: Math.random() > 0.9 },
+                { name: 'Coupon Finder', risk: Math.random() > 0.7 }
+            ];
+
+            let threats = 0;
+            fakeExtensions.forEach(ext => {
+                const li = document.createElement('li');
+                if (ext.risk) {
+                    threats++;
+                    li.textContent = `${ext.name} - Suspicious`;
+                    li.style.color = '#d32f2f';
+                    addToQuarantine(`Extension: ${ext.name}`, 'threat');
+                    updateLog(`Extension scan: ${ext.name} - Threat`, 'threat');
+                } else {
+                    li.textContent = `${ext.name} - Safe`;
+                    li.style.color = '#2e7d32';
+                    updateLog(`Extension scan: ${ext.name} - Safe`, 'safe');
+                }
+                extensionList.appendChild(li);
+            });
+
+            resultDiv.textContent = threats > 0 ? `❌ ${threats} Risky Extension${threats > 1 ? 's' : ''} Found!` : '✅ All Extensions Safe!';
+            resultDiv.className = threats > 0 ? 'threat' : 'safe';
+            resultDiv.style.display = 'block';
+        }
+
+        // Firewall Monitor
+        function monitorFirewall() {
+            const resultDiv = document.getElementById('firewall-result');
+            const firewallLog = document.getElementById('firewall-log');
+            resultDiv.style.display = 'none';
+            firewallLog.innerHTML = '';
+
+            const firewallEvents = ['Unauthorized port access', 'Suspicious inbound traffic', 'Blocked IP attempt'];
+            let threats = 0;
+
+            setInterval(() => {
+                const randomEvent = firewallEvents[Math.floor(Math.random() * firewallEvents.length)];
+                const random = Math.random();
+                if (random > 0.9) {
+                    threats++;
+                    const li = document.createElement('li');
+                    li.textContent = `${new Date().toLocaleString()}: ${randomEvent}`;
+                    li.style.color = '#d32f2f';
+                    firewallLog.insertBefore(li, firewallLog.firstChild);
+                    addToQuarantine(`Firewall: ${randomEvent}`, 'threat');
+                    updateLog(`Firewall monitor: ${randomEvent}`, 'threat');
+                    resultDiv.textContent = `❌ ${threats} Firewall Threat${threats > 1 ? 's' : ''} Detected!`;
+                    resultDiv.className = 'threat';
+                    resultDiv.style.display = 'block';
+                } else if (settings.verboseLog && random > 0.7) {
+                    updateLog('Firewall monitor: Normal activity', 'safe');
+                }
+            }, 4000);
+            updateLog('Firewall monitoring started', 'safe');
+        }
+
+        // Privacy Check
+        function checkPrivacy() {
+            const resultDiv = document.getElementById('privacy-result');
+            const privacyIssues = document.getElementById('privacy-issues');
+            resultDiv.style.display = 'none';
+            privacyIssues.innerHTML = '';
+
+            const privacyChecks = [
+                { name: 'Cookies', risk: Math.random() > 0.9 },
+                { name: 'Location Access', risk: Math.random() > 0.85 },
+                { name: 'Camera Permissions', risk: Math.random() > 0.9 }
+            ];
+
+            let issues = 0;
+            privacyChecks.forEach(check => {
+                const li = document.createElement('li');
+                if (check.risk) {
+                    issues++;
+                    li.textContent = `${check.name} - Potential privacy risk`;
+                    li.style.color = '#ef6c00';
+                    addToQuarantine(`Privacy: ${check.name}`, 'warning');
+                    updateLog(`Privacy check: ${check.name} - Risk detected`, 'warning');
+                } else {
+                    li.textContent = `${check.name} - Secure`;
+                    li.style.color = '#2e7d32';
+                    updateLog(`Privacy check: ${check.name} - Secure`, 'safe');
+                }
+                privacyIssues.appendChild(li);
+            });
+
+            resultDiv.textContent = issues > 0 ? `⚠️ ${issues} Privacy Issue${issues > 1 ? 's' : ''} Found!` : '✅ Privacy is Secure!';
+            resultDiv.className = issues > 0 ? 'warning' : 'safe';
+            resultDiv.style.display = 'block';
+        }
+
+        // Threat Feed
+        function updateThreatFeed() {
+            const threatList = document.getElementById('threat-feed-list');
+            const threats = [
+                'New phishing campaign targeting banks',
+                'Malware detected in .xyz domains',
+                'Ransomware spike in Europe'
+            ];
+
+            setInterval(() => {
+                const randomThreat = threats[Math.floor(Math.random() * threats.length)];
+                const li = document.createElement('li');
+                li.textContent = `${new Date().toLocaleString()}: ${randomThreat}`;
+                li.style.color = '#ef6c00';
+                threatList.insertBefore(li, threatList.firstChild);
+                if (threatList.children.length > 10) threatList.removeChild(threatList.lastChild);
+            }, 10000);
+        }
+
+        // Update Checker
+        function checkUpdates() {
+            const resultDiv = document.getElementById('update-result');
+            resultDiv.style.display = 'none';
+
+            setTimeout(() => {
+                const currentVersion = '1.2.3';
+                const latestVersion = Math.random() > 0.5 ? '1.2.4' : currentVersion;
+                if (latestVersion !== currentVersion) {
+                    resultDiv.textContent = `⚠️ Update Available: v${latestVersion}`;
+                    resultDiv.className = 'warning';
+                    updateLog(`Update check: New version ${latestVersion} available`, 'warning');
+                } else {
+                    resultDiv.textContent = '✅ You are up to date!';
+                    resultDiv.className = 'safe';
+                    updateLog('Update check: No updates available', 'safe');
+                }
+                resultDiv.style.display = 'block';
+            }, 1000);
+        }
+
+        // Report Generation
+        async function generateReport() {
+            const input = document.getElementById('reportInput').value.trim();
+            const resultDiv = document.getElementById('report-result');
+            const reportList = document.getElementById('report-list');
+            const exportBtn = document.getElementById('exportReport');
+            resultDiv.style.display = 'none';
+            exportBtn.style.display = 'none';
+            reportList.innerHTML = '';
+
+            if (!input) {
+                resultDiv.textContent = '⚠️ Please enter items to scan!';
+                resultDiv.className = 'warning';
+                resultDiv.style.display = 'block';
+                updateLog('Report generation failed: No input', 'warning');
+                return;
+            }
+
+            const items = input.split('\n').filter(item => item.trim());
+            reportData = [];
+            resultDiv.textContent = 'Generating report...';
+            resultDiv.className = 'safe';
+            resultDiv.style.display = 'block';
+
+            for (const item of items) {
+                let status, type;
+                if (item.match(/^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/.*)?$/)) {
+                    await scanURL(item);
+                    status = document.getElementById('url-result').textContent;
+                    type = document.getElementById('url-result').className;
+                } else {
+                    status = Math.random() > 0.9 ? '❌ Threat Detected!' : Math.random() > 0.7 ? '⚠️ Suspicious!' : '✅ Safe';
+                    type = status.includes('❌') ? 'threat' : status.includes('⚠️') ? 'warning' : 'safe';
+                    updateLog(`Report scan: ${item} - ${type}`, type);
+                    if (type !== 'safe') addToQuarantine(item, type);
+                }
+                reportData.push({ item, status, details: type === 'safe' ? 'No issues' : 'Potential threat' });
+
+                const li = document.createElement('li');
+                li.innerHTML = `<span style="color: ${type === 'safe' ? '#2e7d32' : type === 'threat' ? '#d32f2f' : '#ef6c00'}">${item}: ${status}</span>`;
+                reportList.appendChild(li);
+            }
+
+            resultDiv.textContent = `✅ Report Generated for ${items.length} Items!`;
+            exportBtn.style.display = 'block';
+        }
+
+        function exportReport() {
+            const csv = 'Item,Status,Details\n' + reportData.map(row => `"${row.item}","${row.status.replace(/✅|⚠️|❌/g, '')}","${row.details}"`).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'antivirus_report.csv';
+            link.click();
+            updateLog('Report exported as CSV', 'safe');
+        }
+
+        // Load Initial State
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.querySelector('.container').classList.add('active');
+            }, 3000);
+
+            updateLog('Guardian Antivirus Pro started', 'safe');
+            renderLog();
+            renderQuarantine();
+            updateThreatFeed();
+            document.getElementById('urlInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') scanURL();
+            });
+            document.getElementById('autoQuarantine').checked = settings.autoQuarantine;
+            document.getElementById('verboseLog').checked = settings.verboseLog;
+            document.getElementById('disableAnimations').checked = settings.disableAnimations;
+            if (settings.disableAnimations) toggleAnimations();
+        };
+    </script>
+</body>
+</html>
